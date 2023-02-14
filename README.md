@@ -22,3 +22,6 @@ Requires Node 18
 # Frontend deploy
 1. `cd frontend` 
 2. `npm run deploy`
+
+# Backend deploy
+Just push to main branch and backend will automatically deploy!
