@@ -1,24 +1,29 @@
-from click import File
 import mysql.connector
 
 db = mysql.connector.connect(
   host="localhost",
   user="root",
-  password="Aa138484653++"
-  
+  password="Aa138484653++",
+  database = "shelfLife"
 )
 
 cursor = db.cursor();
+def execute_sql(filename):    
+    executable = "";
+    with open(filename) as f:
+        executable += f.read()
+    cursor.execute(executable, multi=True)
 
-cursor.execute("DROP DATABASE IF EXISTS shelfLife")
-
-cursor.execute("CREATE DATABASE shelfLife");
+execute_sql("database\create_user_table.sql");
+execute_sql('database\create_shelf_table.sql')
+execute_sql('database\create_food_table.sql');
 
 cursor.execute("SHOW DATABASES")
+print(cursor.fetchall())
 
-database = cursor.fetchall();
+cursor.execute("SHOW TABLES")
 
-for db in database:
-    print(db);
+print(cursor.fetchall())
+
 cursor.close()
 db.close();
