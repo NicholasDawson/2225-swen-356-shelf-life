@@ -1,34 +1,18 @@
-import psycopg2
 from sqlMethods import *
 
-db = psycopg2.connect(
-  database = "shelflife",
-  user = "shelflife",
-  password = "12345",
-  host = "localhost",
-  port = '5432'
-)
 
-cursor = db.cursor();
-def execute_sql(filename):    
-    executable = "";
-    with open(filename) as f:
-        executable += f.read()
-    cursor.execute(executable);
-    
-def printTables():
-  cursor.execute("""SELECT table_name FROM information_schema.tables
-  WHERE table_schema = 'public'""");
-  for table in cursor.fetchall():
-      print(table)
+setup()
+addUser("test1","123")
+sir = getUser("test1","123")
+addShelf(sir.id)
+shelf = getShelf(sir.id)
 
-execute_sql("database\create_user_table.sql");
-execute_sql('database\create_shelf_table.sql')
-execute_sql('database\create_food_table.sql');
+addFood(shelf.id[0],"Tomato","2016-06-22 19:10:25-07")
+food = getFood(shelf.id[0])
+print(shelf)
+print(food)
 printTables()
 
-
-addUser(cursor,"test1","123")
-print(getUser(cursor,"test1","123"))
-cursor.close()
-db.close();
+cursor.execute("SELECT * FROM food")
+shelfOne = cursor.fetchall();
+print(shelfOne)

@@ -1,6 +1,6 @@
 
 from .Shelf import Shelf
-
+from sqlMethods import *
 
 class User:
     def __init__(self, id, name, pwd):
@@ -23,7 +23,6 @@ class User:
     
     def addShelf(self):
         #generate a new uuid from sql and then get from the table
-        
         self.__shelves.append(Shelf());
     
     def __str__(self) -> str:
