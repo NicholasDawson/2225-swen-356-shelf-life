@@ -1,6 +1,4 @@
-
-from .Shelf import Shelf
-from sqlMethods import *
+import sqlMethods as sql;
 
 class User:
     def __init__(self, id, name, pwd):
@@ -23,7 +21,11 @@ class User:
     
     def addShelf(self):
         #generate a new uuid from sql and then get from the table
-        self.__shelves.append(Shelf());
+        #init a new shelf for the user
+        sql.addShelf(self.__id);
+        Shelf = sql.getShelf(self.__id);
+        self.__shelves.append(Shelf);
+        return Shelf;
     
     def __str__(self) -> str:
         return "ID - " + self.id + " | NAME - "+self.name

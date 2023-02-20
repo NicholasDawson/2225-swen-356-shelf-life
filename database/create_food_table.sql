@@ -4,6 +4,6 @@ CREATE TABLE food (
   shelfId UUID REFERENCES shelf (shelfId) NOT NULL,
   name TEXT NOT NULL UNIQUE,
   expiration DATE,
-  dateAdded TIMESTAMP NOT NULL DEFAULT NOW(),
+  dateAdded DATE NOT NULL,
   quantity INT DEFAULT 1
 );

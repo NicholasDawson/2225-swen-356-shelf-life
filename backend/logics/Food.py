@@ -47,7 +47,12 @@ class Food:
     
     def increment(self):
         self.__quantity += 1;
+        return self;
     
     def decrement(self):
         self.__quantity -= 1;
+        return self;
+    
+    def __str__(self) -> str:
+        return self.id + " " + self.shelfId+ " " + self.name + " " + str(self.expiration) + " " + str(self.quantity);
         

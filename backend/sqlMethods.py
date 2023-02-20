@@ -36,32 +36,63 @@ def setup():
 
 #food functionality
 def addFood(shelfId, name, expiration):
-    sqlStatement = """INSERT INTO food(shelfId, name, expiration)
-                    VALUES( '%s', '%s', '%s')""" %(shelfId, name, expiration);
+    sqlStatement = """INSERT INTO food(shelfId, name, expiration, dateAdded)
+                    VALUES( '%s', '%s', '%s', CURRENT_DATE)""" %(shelfId, name, expiration);
     cursor.execute(sqlStatement);
     db.commit();
 
+# def addFood(shelfId, name, expiration):
+#     sqlStatement = """INSERT INTO food(shelfId, name, expiration, dateAdded)
+#                     VALUES( '%s', '%s', '%s', CURRENT_DATE)""" %(shelfId, name, expiration);
+#     cursor.execute(sqlStatement);
+#     db.commit();
 
-def getFood(shelfId, name) -> Food:
-    sqlStatement = """SELECT foodId, expiration, quantity
+# def getFood(shelfId, name) -> Food:
+#     sqlStatement = """SELECT foodId, expiration, quantity
+#                       FROM food
+#                       WHERE shelfId = '%s'
+#                       AND name = '%s' """ %(shelfId, name);
+#     cursor.execute(sqlStatement);
+#     food = cursor.fetchone();
+#     db.commit();
+#     return Food(food[0], shelfId, name, food[1], food[2])
+
+def getFood(foodId) -> Food:
+    sqlStatement = """SELECT shelfId, name, expiration, quantity
                       FROM food
-                      WHERE shelfId = '%s'
-                      AND name = '%s' """ %(shelfId, name);
+                      WHERE foodId = '%s'""" %(foodId);
     cursor.execute(sqlStatement);
     food = cursor.fetchone();
     db.commit();
-    return Food(food[0], shelfId, name, food[1], food[2])
+    return Food(foodId,food[0],food[1],food[2],food[3]);
 
-def getFood(shelfId) -> Food:
-    sqlStatement = """SELECT foodId, name, expiration, quantity
+
+def getFood(foodName) -> Food:
+    sqlStatement = """SELECT foodId, shelfId, expiration, quantity
                       FROM food
-                      WHERE shelfId = '%s'""" %(shelfId);
+                      WHERE name = '%s'""" %(foodName);
     cursor.execute(sqlStatement);
     food = cursor.fetchone();
-    print(food)
     db.commit();
+    return Food(food[0],food[1],foodName,food[2],food[3]);
+
+def updateFood(shelfId):
+    sqlStatement = """UPDATE food
+                    SET 
+                    WHERE shelfId = '%s'"""%(shelfId)
+    return
+
+def useFood(food : Food, shelfId):
+    sqlStatement = """UPDATE food
+                    SET quantity = %d
+                    WHERE foodId = '%s'
+                    AND shelfId = '%s'"""%(food.quantity, food.id, shelfId)
+    cursor.execute(sqlStatement);
+    db.commit();
+
+def removeFood():
+    return
     
-    # return Food(food[0][0], shelfId, food[0][1], food[0][2])
 #shelves functionality
 #-------------------------------------
 def addShelf(userUID):
@@ -82,7 +113,7 @@ def getShelf(userUID) -> Shelf:
     cursor.execute(sqlStatement)
     shelfID = cursor.fetchone()
     db.commit();
-    return Shelf(shelfID);
+    return Shelf(shelfID[0]);
 
 #users functionality
 #--------------------------------------
@@ -103,4 +134,6 @@ def getUser(usn,pwd) -> User:
     id = cursor.fetchone();
     db.commit();
     return User(id[0],usn,pwd)
+
+
 
