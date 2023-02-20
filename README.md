@@ -20,8 +20,7 @@ Requires Node 18
 3. Run app `npm start`
 
 # Frontend deploy
-1. `cd frontend` 
-2. `npm run deploy`
+Just push or accept a PR to main branch and frontend will automatically deploy!
 
 # Backend deploy
 Just push to main branch and backend will automatically deploy!
