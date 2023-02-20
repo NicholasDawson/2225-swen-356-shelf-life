@@ -55,4 +55,6 @@ class Food:
     
     def __str__(self) -> str:
         return self.id + " " + self.shelfId+ " " + self.name + " " + str(self.expiration) + " " + str(self.quantity);
-        
+    
+    def __eq__(self, __o: object) -> bool:
+        return (self.id == __o.id) and (self.expiration == __o.expiration) and (self.shelfId == __o.shelfId) and (self.quantity == __o.quantity) ;

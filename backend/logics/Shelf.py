@@ -16,21 +16,14 @@ class Shelf:
     
     #adding item to the back
     def addFood(self, item: Food):
-        self.__container.append(item);
-    
-    #adding item to a specific spot
-    # def addItem(self, item: Food, index):
-    #     self.__container[index] = item;
-    
-    #removing item from a specific spot
-    def removeItem(self, index : int):   
-        if(self.___container[index] != None):
-            self.__container[index] = None;
+        if item not in self.container:
+            self.__container.append(item);
+            sqlMethods.addFood(self.id, item.name, item.expiration)
 
-    def removeItem(self, item : Food):
-        index = self.__container.index(item);
-        if(self.__container[index] != None):
-            self.__container[index] = None;
+    def removeFood(self, item : Food):
+        if item in self.container:
+            self.container[self.container.index(item)] = None;
+            sqlMethods.removeFood(item, self.id)
             
     def useFood(self, item : Food):
         if(item.quantity > 0):
@@ -38,9 +31,7 @@ class Shelf:
                 if(e == item):
                   updatedFood = item.decrement();
                   sqlMethods.useFood(updatedFood, self.id);
-        
-        
-        
+                  self.container[self.container.index(item)] = updatedFood;
         
     #check if the container have available space
     def empty(self):

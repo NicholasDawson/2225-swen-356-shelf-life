@@ -20,11 +20,10 @@ newShelf.addFood(food);
 newShelf.useFood(food);
 print(newShelf.container[0])
 
-# cursor.execute("SELECT * FROM food")
-# shelfOne = cursor.fetchall();
-# print(shelfOne)
+food = getFood("Tomato");
+print(food);
 
-# shelf.useFood(food)
-# print(shelf.id)
-# result = getFood(shelf.id);
-# print(result)
+newShelf.removeFood(food)
+
+print(newShelf.container)
+food = getFood("Tomato")

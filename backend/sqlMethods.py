@@ -36,26 +36,17 @@ def setup():
 
 #food functionality
 def addFood(shelfId, name, expiration):
-    sqlStatement = """INSERT INTO food(shelfId, name, expiration, dateAdded)
-                    VALUES( '%s', '%s', '%s', CURRENT_DATE)""" %(shelfId, name, expiration);
-    cursor.execute(sqlStatement);
-    db.commit();
 
-# def addFood(shelfId, name, expiration):
-#     sqlStatement = """INSERT INTO food(shelfId, name, expiration, dateAdded)
-#                     VALUES( '%s', '%s', '%s', CURRENT_DATE)""" %(shelfId, name, expiration);
-#     cursor.execute(sqlStatement);
-#     db.commit();
+    cursor.execute("""SELECT * FROM food
+                      WHERE name = '%s'"""%(name))
+    if cursor.fetchone() == None:
+        sqlStatement = """INSERT INTO food(shelfId, name, expiration, dateAdded)
+                        VALUES( '%s', '%s', '%s', CURRENT_DATE)""" %(shelfId, name, expiration);
+        cursor.execute(sqlStatement);
+        db.commit();
+    else:
+        return
 
-# def getFood(shelfId, name) -> Food:
-#     sqlStatement = """SELECT foodId, expiration, quantity
-#                       FROM food
-#                       WHERE shelfId = '%s'
-#                       AND name = '%s' """ %(shelfId, name);
-#     cursor.execute(sqlStatement);
-#     food = cursor.fetchone();
-#     db.commit();
-#     return Food(food[0], shelfId, name, food[1], food[2])
 
 def getFood(foodId) -> Food:
     sqlStatement = """SELECT shelfId, name, expiration, quantity
@@ -74,13 +65,9 @@ def getFood(foodName) -> Food:
     cursor.execute(sqlStatement);
     food = cursor.fetchone();
     db.commit();
+    if food is None:
+        return food;
     return Food(food[0],food[1],foodName,food[2],food[3]);
-
-def updateFood(shelfId):
-    sqlStatement = """UPDATE food
-                    SET 
-                    WHERE shelfId = '%s'"""%(shelfId)
-    return
 
 def useFood(food : Food, shelfId):
     sqlStatement = """UPDATE food
@@ -90,8 +77,12 @@ def useFood(food : Food, shelfId):
     cursor.execute(sqlStatement);
     db.commit();
 
-def removeFood():
-    return
+def removeFood(food: Food, shelfId):
+    sqlStatement = """DELETE from food
+                    WHERE foodId = '%s'
+                    AND shelfId = '%s'"""%(food.id, shelfId)
+    cursor.execute(sqlStatement);
+    db.commit();
     
 #shelves functionality
 #-------------------------------------
