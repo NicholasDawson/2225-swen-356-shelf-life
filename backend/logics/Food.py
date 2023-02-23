@@ -2,9 +2,9 @@ SUCCESS = "Success Operation";
 UNSUCCESS = "Unsuccess Operation";
 
 class Food:
-    def __init__(self, id, shelfId, name, expiration, quantity):
+    def __init__(self, id, name, expiration, quantity):
         self.__id = id;
-        self.__shelfId = shelfId;
+        # self.__shelfId = shelfId;
         self.__name = name;
         self.__expiration = expiration;
         self.__quantity = quantity;
@@ -58,3 +58,6 @@ class Food:
     
     def __eq__(self, __o: object) -> bool:
         return (self.id == __o.id) and (self.expiration == __o.expiration) and (self.shelfId == __o.shelfId) and (self.quantity == __o.quantity) ;
+    
+    def __hash__(self) -> int:
+        return hash(self.id + self.name+ self.quantity * self.expiration)

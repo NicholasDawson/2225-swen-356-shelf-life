@@ -1,5 +1,4 @@
-from .Food import Food
-import sqlMethods
+import sqlMethods as sql
 
 class Shelf:
     def __init__(self, id):
@@ -15,27 +14,28 @@ class Shelf:
         return self.__container;
     
     #adding item to the back
-    def addFood(self, item: Food):
+    def addFood(self, userId, shelfId, name, expiration):
+        item = sql.getFood(name,expiration)
         if item not in self.container:
-            self.__container.append(item);
-            sqlMethods.addFood(self.id, item.name, item.expiration)
+            food = sql.addFood(shelfId, userId, name, expiration)
+            self.container.append(food);
 
-    def removeFood(self, item : Food):
+    def removeFood(self, item ):
         if item in self.container:
             self.container[self.container.index(item)] = None;
-            sqlMethods.removeFood(item, self.id)
+            sql.removeFood(item, self.id)
             
-    def useFood(self, item : Food):
+    def useFood(self, item):
         if(item.quantity > 0):
             for e in self.__container:
                 if(e == item):
                   updatedFood = item.decrement();
-                  sqlMethods.useFood(updatedFood, self.id);
-                  self.container[self.container.index(item)] = updatedFood;
+                  sql.useFood(updatedFood, self.id);
+                  self.container[self.container.index(e)] = updatedFood;
         
     #check if the container have available space
     def empty(self):
-        if ((self.__container.length() > 3) and (None not in self.__container)):
+        if ((len(self.container) < 3) or (None in self.__container)):
             return True;
         else:
             return False;
