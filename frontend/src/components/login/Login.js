@@ -1,6 +1,7 @@
 import { Component } from "react";
-import './signup.css'
-class SignUp extends Component {
+import "./login.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+class Login extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -10,11 +11,12 @@ class SignUp extends Component {
 
     render() {
         return (
+            
             <body class="form-cont">
 
                 <main class="form-signin w-100 m-auto">
                 <form>
-                    <h1 class="h3 mb-3 fw-normal">Sign Up</h1>
+                    <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
                     <div class="form-floating">
                         
@@ -26,16 +28,11 @@ class SignUp extends Component {
                         <input type="password" class="form-control" id="floatingPassword" placeholder="Password"></input>
                         <label for="floatingPassword">Password: </label>
                     </div>
-                    <div class="form-floating">
-                        
-                        <input type="password" class="form-control" id="floatingPasswordC" placeholder="Password"></input>
-                        <label for="floatingPasswordC">Confirm Password: </label>
-                    </div>
-                    <button class="w-100 btn btn-lg btn-primary b_color" type="submit">Sign Up</button>
+                    <button class="w-100 btn btn-lg btn-primary b_color" type="submit">Sign in</button>
                 </form>
                 </main>
             </body>
         )
     }
 }
-export default SignUp
+export default Login
