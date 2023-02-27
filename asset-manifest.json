@@ -1,16 +1,15 @@
 {
   "files": {
-    "main.css": "/2225-swen-356-shelf-life/static/css/main.073c9b0a.css",
-    "main.js": "/2225-swen-356-shelf-life/static/js/main.61555da7.js",
+    "main.css": "/2225-swen-356-shelf-life/static/css/main.8aad192f.css",
+    "main.js": "/2225-swen-356-shelf-life/static/js/main.cb6b365e.js",
     "static/js/787.42c9648b.chunk.js": "/2225-swen-356-shelf-life/static/js/787.42c9648b.chunk.js",
-    "static/media/logo.svg": "/2225-swen-356-shelf-life/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
     "index.html": "/2225-swen-356-shelf-life/index.html",
-    "main.073c9b0a.css.map": "/2225-swen-356-shelf-life/static/css/main.073c9b0a.css.map",
-    "main.61555da7.js.map": "/2225-swen-356-shelf-life/static/js/main.61555da7.js.map",
+    "main.8aad192f.css.map": "/2225-swen-356-shelf-life/static/css/main.8aad192f.css.map",
+    "main.cb6b365e.js.map": "/2225-swen-356-shelf-life/static/js/main.cb6b365e.js.map",
     "787.42c9648b.chunk.js.map": "/2225-swen-356-shelf-life/static/js/787.42c9648b.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.073c9b0a.css",
-    "static/js/main.61555da7.js"
+    "static/css/main.8aad192f.css",
+    "static/js/main.cb6b365e.js"
   ]
 }
