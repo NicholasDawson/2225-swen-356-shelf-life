@@ -1,13 +1,10 @@
+import os
 import psycopg2
 
-db = psycopg2.connect(
-  database = "shelflife",
-  user = "shelflife",
-  password = "12345",
-  host = "localhost",
-  port = '5432'
-)
+db = psycopg2.connect(os.getenv("DATABASE_URL"))
+
 cursor = db.cursor();
+
 from logics.User import User
 from logics.Shelf import Shelf
 from logics.Food import Food
