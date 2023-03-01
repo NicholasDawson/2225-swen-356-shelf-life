@@ -1,6 +1,7 @@
 import { Component } from "react";
 import "./login.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import logo from './image.png';
 class Login extends Component {
     constructor(props){
         super(props);
@@ -13,7 +14,7 @@ class Login extends Component {
         return (
             
             <body class="form-cont">
-
+                <img src = {logo} alt=""/>
                 <main class="form-signin w-100 m-auto">
                 <form>
                     <h1 class="h3 mb-3 fw-normal">Please sign in</h1>

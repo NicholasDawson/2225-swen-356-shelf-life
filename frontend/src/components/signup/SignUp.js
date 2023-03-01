@@ -1,5 +1,6 @@
 import { Component } from "react";
 import './signup.css'
+import logo from './image.png'
 class SignUp extends Component {
     constructor(props){
         super(props);
@@ -11,7 +12,7 @@ class SignUp extends Component {
     render() {
         return (
             <body class="form-cont">
-
+                <img src={logo} alt=""/>
                 <main class="form-signin w-100 m-auto">
                 <form>
                     <h1 class="h3 mb-3 fw-normal">Sign Up</h1>

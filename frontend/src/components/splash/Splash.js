@@ -10,28 +10,52 @@ class Splash extends Component {
         }
     }
     render() {
+      //<svg class="bi" width="1em" height="1em"><use xlink:href="#collection"/></svg>
         return (
-            <div className="splash-screen">
-              <div className="cat-absolute-container">
-                <span className="shelf-lyfe">SHELF LYFE</span>
-                <span className="brief-project-descri">Brief project description</span>
-                <div className="flex-container">
-                  <button>Feature 1</button>
-                  <button>Feature 2</button>
-                </div>
-                <div className="flex-container-1">
-                  
-                  <div className="cat-absolute-container-1">
-                    <span className="get-started">Get Started</span>
+            <main>
+            <h1 class="visually-hidden">Features examples</h1>
+          
+            <div class="container px-4 py-5" id="featured-3">
+              <h2 class="pb-2 border-bottom">Columns with icons 
+                <button class="btn btn-primary">Get Started</button>
+                <button class="btn btn-secondary">Login</button></h2>
+              <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+                <div class="feature col">
+                  <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
+                    
                   </div>
+                  <h3 class="fs-2">Featured title</h3>
+                  <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
+                  <a href="#" class="icon-link d-inline-flex align-items-center">
+                    Learn More
+                  </a>
                 </div>
-                <div className="flex-container-2">
-                  <button>Feature 3</button>
-                  <button>Feature 4</button>
+                <div class="feature col">
+                  <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
+                    
+                  </div>
+                  <h3 class="fs-2">Featured title</h3>
+                  <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
+                  <a href="#" class="icon-link d-inline-flex align-items-center">
+                    Learn More
+                  </a>
+                </div>
+                <div class="feature col">
+                  <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
+                    
+                  </div>
+                  <h3 class="fs-2">Featured title</h3>
+                  <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
+                  <a href="#" class="icon-link d-inline-flex align-items-center">
+                    Learn More
+                  </a>
                 </div>
               </div>
-              
             </div>
+          
+          
+          
+          </main>
           );
     }
 }
