@@ -50,8 +50,9 @@ def create_food():
     food = addFood(None, None, name, expiration_date)
     return jsonify(food.__dict__)
 
+#TODO uncertain if this on is necessary could be helpful to change the expiration date
 @app.route('/food/<string:id>', methods=['PUT'])
-def update_my_object(id):
+def update_food(id):
     data = request.get_json()
     cur = conn.cursor()
     cur.execute("UPDATE Food SET name = %s, expiration = %s, quantity = %s WHERE id = %s", (data['name'], data['expiration'], data['quantity'], id))
@@ -59,14 +60,14 @@ def update_my_object(id):
     cur.execute("SELECT * FROM my_objects WHERE id = %s", (id,))
     row = cur.fetchone()
     my_object = Food(row[0], row[1], row[2], row[3])
-    return jsonify(my_object.__dict__)
+    return jsonify(my_object.__dict__), 200
 
 @app.route('/food/<string:id>', methods=['DELETE'])
-def delete_my_object(id):
-    cur = conn.cursor()
-    cur.execute("DELETE FROM food WHERE id = %s", (id,))
-    conn.commit()
-    return '', 204
+def delete_food(id):
+    data = request.json
+    removeFood(id, userId=data['userId'], shelfId=data['shelfId'])
+    response = jsonify({'message': 'Food removed successfully'})
+    return response, 204
 
 oauth = OAuth(app)
 # TODO: make the client ID and the secret env variables
