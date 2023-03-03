@@ -39,50 +39,51 @@ def addFood(shelfId, userId, name, expiration):
         # cursor.execute(sqlStatement);
         sqlStatement = """INSERT INTO food(name, expiration, dateAdded)
                         VALUES('%s', '%s', CURRENT_DATE)""" %(name, expiration);
-        cursor.execute(sqlStatement);
+        cursor.execute(sqlStatement)
         cursor.execute("""SELECT * FROM food
                       WHERE name = '%s' 
                       AND expiration = '%s'"""%(name, expiration))
-        db.commit();
-        return cursor.fetchone()[0];
+        db.commit()
+        return cursor.fetchone()[0]
+    return None
 
 
 
 def getFood(foodId) -> Food:
     sqlStatement = """SELECT shelfId, name, expiration, quantity
                       FROM food
-                      WHERE foodId = '%s'""" %(foodId);
-    cursor.execute(sqlStatement);
-    food = cursor.fetchone();
-    db.commit();
-    return Food(foodId,food[0],food[1],food[2],food[3]);
+                      WHERE foodId = '%s'""" %(foodId)
+    cursor.execute(sqlStatement)
+    food = cursor.fetchone()
+    db.commit()
+    return Food(foodId,food[0],food[1],food[2],food[3])
 
 
 def getFood(foodName,expiration) -> Food:
     sqlStatement = """SELECT foodId, quantity
                       FROM food
                       WHERE name = '%s'
-                      AND expiration = '%s'""" %(foodName,expiration);
-    cursor.execute(sqlStatement);
-    food = cursor.fetchone();
-    db.commit();
+                      AND expiration = '%s'""" %(foodName,expiration)
+    cursor.execute(sqlStatement)
+    food = cursor.fetchone()
+    db.commit()
     if food is None:
-        return food;
-    return Food(food[0],foodName,expiration,food[1]);
+        return food
+    return Food(food[0],foodName,expiration,food[1])
 
 def useFood(food : Food):
     sqlStatement = """UPDATE food
                     SET quantity = %d
                     WHERE foodId = '%s'"""%(food.quantity, food.id)
-    cursor.execute(sqlStatement);
-    db.commit();
+    cursor.execute(sqlStatement)
+    db.commit()
 
 def removeFood(food: Food, shelfId):
     sqlStatement = """DELETE from food
                     WHERE foodId = '%s'
                     AND shelfId = '%s'"""%(food.id, shelfId)
-    cursor.execute(sqlStatement);
-    db.commit();
+    cursor.execute(sqlStatement)
+    db.commit()
     
 #shelves functionality
 #-------------------------------------
@@ -90,9 +91,9 @@ def addShelf(userUID):
     sqlStatement = """
         INSERT INTO shelf(userId)
         VALUES( '%s')
-    """ %(userUID);
+    """ %(userUID)
     cursor.execute(sqlStatement)
-    db.commit();
+    db.commit()
     
 
 def getShelf(userUID) -> Shelf:
@@ -103,8 +104,8 @@ def getShelf(userUID) -> Shelf:
     """%(userUID)
     cursor.execute(sqlStatement)
     shelfID = cursor.fetchone()
-    db.commit();
-    return Shelf(shelfID[0]);
+    db.commit()
+    return Shelf(shelfID[0])
 
 #users functionality
 #--------------------------------------
@@ -113,17 +114,17 @@ def addUser(usn,pwd):
         INSERT INTO users(username, password)
         VALUES('%s','%s');
     """%(usn,pwd)
-    cursor.execute(sqlStatement);
-    db.commit();
+    cursor.execute(sqlStatement)
+    db.commit()
     
 def getUser(usn,pwd) -> User:
     cursor.execute("""SELECT userID 
                              FROM users
                              WHERE username = '%s'
                              AND password = '%s'
-                             """%(usn,pwd));
-    id = cursor.fetchone();
-    db.commit();
+                             """%(usn,pwd))
+    id = cursor.fetchone()
+    db.commit()
     return User(id[0],usn,pwd)
 
 
