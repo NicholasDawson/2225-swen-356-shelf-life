@@ -6,8 +6,6 @@ setup()
 addUser("test1","123")
 sir = getUser("test1","123")
 
-# #create a new shelf
-newShelf = sir.addShelf();
 
 #add food to current existing shelf array
 
@@ -31,6 +29,7 @@ print(getFood("Tomato", expiration), "databaes")
 sir.removeFood("Tomato", expiration)
 
 print(getFood("Tomato", expiration), "databaes")
+
 
 
 
