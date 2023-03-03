@@ -16,9 +16,14 @@ class Shelf:
     #adding item to the back
     def addFood(self, userId, shelfId, name, expiration):
         item = sql.getFood(name,expiration)
+        print(hash(item))
         if item not in self.container:
             food = sql.addFood(shelfId, userId, name, expiration)
             self.container.append(food);
+        else:
+            self.container[self.container.index(item)] = item.increment();
+            food = sql.addFood(shelfId, userId, name, expiration);
+            
 
     def removeFood(self, item ):
         if item in self.container:

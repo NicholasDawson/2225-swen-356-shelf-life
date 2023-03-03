@@ -60,13 +60,14 @@ def getFood(foodId) -> Food:
 
 
 def getFood(foodName,expiration) -> Food:
+    print(foodName + " " + expiration)
     sqlStatement = """SELECT foodId, quantity
                       FROM food
                       WHERE name = '%s'
-                      AND expiration = '%s'""" %(foodName,expiration)
-    cursor.execute(sqlStatement)
-    food = cursor.fetchone()
-    db.commit()
+                      AND expiration = '%s'""" %(foodName,expiration);
+    cursor.execute(sqlStatement);
+    food = cursor.fetchone();
+    db.commit();
     if food is None:
         return food
     return Food(food[0],foodName,expiration,food[1])
@@ -75,15 +76,15 @@ def useFood(food : Food):
     sqlStatement = """UPDATE food
                     SET quantity = %d
                     WHERE foodId = '%s'"""%(food.quantity, food.id)
-    cursor.execute(sqlStatement)
-    db.commit()
+    cursor.execute(sqlStatement);
+    db.commit();
 
 def removeFood(food: Food, shelfId):
     sqlStatement = """DELETE from food
                     WHERE foodId = '%s'
                     AND shelfId = '%s'"""%(food.id, shelfId)
-    cursor.execute(sqlStatement)
-    db.commit()
+    cursor.execute(sqlStatement);
+    db.commit();
     
 #shelves functionality
 #-------------------------------------
@@ -91,9 +92,9 @@ def addShelf(userUID):
     sqlStatement = """
         INSERT INTO shelf(userId)
         VALUES( '%s')
-    """ %(userUID)
+    """ %(userUID);
     cursor.execute(sqlStatement)
-    db.commit()
+    db.commit();
     
 
 def getShelf(userUID) -> Shelf:
@@ -104,8 +105,8 @@ def getShelf(userUID) -> Shelf:
     """%(userUID)
     cursor.execute(sqlStatement)
     shelfID = cursor.fetchone()
-    db.commit()
-    return Shelf(shelfID[0])
+    db.commit();
+    return Shelf(shelfID[0]);
 
 #users functionality
 #--------------------------------------
@@ -114,17 +115,17 @@ def addUser(usn,pwd):
         INSERT INTO users(username, password)
         VALUES('%s','%s');
     """%(usn,pwd)
-    cursor.execute(sqlStatement)
-    db.commit()
+    cursor.execute(sqlStatement);
+    db.commit();
     
 def getUser(usn,pwd) -> User:
     cursor.execute("""SELECT userID 
                              FROM users
                              WHERE username = '%s'
                              AND password = '%s'
-                             """%(usn,pwd))
-    id = cursor.fetchone()
-    db.commit()
+                             """%(usn,pwd));
+    id = cursor.fetchone();
+    db.commit();
     return User(id[0],usn,pwd)
 
 

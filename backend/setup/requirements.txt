@@ -19,5 +19,9 @@ pytz==2022.7.1
 requests==2.28.2
 six==1.16.0
 urllib3==1.26.14
+<<<<<<< HEAD
+Werkzeug==2.2.2
+=======
 Werkzeug==2.2.2
 psycopg2-binary==2.9.5
+>>>>>>> 9a6f569d218d5627fa742022e921cd2c324cd0f6

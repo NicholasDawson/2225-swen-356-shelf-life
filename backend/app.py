@@ -1,10 +1,16 @@
-from flask import Flask, url_for, redirect, session
+from flask import Flask, jsonify, request, url_for, redirect, session
 from authlib.integrations.flask_client import OAuth
 import json
 import os
 import psycopg2
 
+
 from dotenv import load_dotenv
+
+from backend.logics.Food import Food 
+from backend.logics import *
+from sqlMethods import *
+
 load_dotenv()
 
 conn = psycopg2.connect(os.getenv("DATABASE_URL"))
@@ -18,6 +24,47 @@ app = Flask(__name__)
 app.secret_key = os.getenv("APP_SECRET_KEY")
 
 # oauth config
+@app.route('/Food', methods=['GET'])
+def get_all_Food():
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM Food")
+    rows = cur.fetchall()
+    foods = []
+    for row in rows:
+        foods.append(Food(row[0], row[1], row[2], row[3], row[4]))
+    return jsonify([my_object.__dict__ for my_object in foods])
+
+@app.route('/food/<int:id>', methods=['GET'])
+def get_Food(id):
+    fode = getFood(id)
+    if fode:
+        return jsonify(fode.__dict__)
+    return jsonify({'message': 'My object not found'}), 404
+    
+
+@app.route('/food', methods=['POST'])
+def create_food(name, expiration):
+    food = addFood(None, None, name, expiration)
+    return jsonify(food.__dict__)
+
+@app.route('/food/<int:id>', methods=['PUT'])
+def update_my_object(id):
+    data = request.get_json()
+    cur = conn.cursor()
+    cur.execute("UPDATE Food SET name = %s, expiration = %s, quantity = %s WHERE id = %s", (data['name'], data['expiration'], data['quantity'], id))
+    conn.commit()
+    cur.execute("SELECT * FROM my_objects WHERE id = %s", (id,))
+    row = cur.fetchone()
+    my_object = Food(row[0], row[1], row[2], row[3])
+    return jsonify(my_object.__dict__)
+
+@app.route('/food/<int:id>', methods=['DELETE'])
+def delete_my_object(id):
+    cur = conn.cursor()
+    cur.execute("DELETE FROM food WHERE id = %s", (id,))
+    conn.commit()
+    return '', 204
+
 oauth = OAuth(app)
 # TODO: make the client ID and the secret env variables
 google = oauth.register(
