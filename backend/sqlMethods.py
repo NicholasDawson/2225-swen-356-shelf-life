@@ -36,9 +36,9 @@ def printTables():
       print(table)
     
 def setup():
-    execute_sql('database\create_shelf_table.sql')
-    execute_sql("database\create_user_table.sql");
-    execute_sql('database\create_food_table.sql');
+    execute_sql('../database/create_shelf_table.sql')
+    execute_sql("../database/create_user_table.sql");
+    execute_sql('../database/create_food_table.sql');
 
 #food functionality
 def addFood(shelfId, userId, name, expiration, quantity = 1):
@@ -74,13 +74,15 @@ def addFood(shelfId, userId, name, expiration, quantity = 1):
 
 
 def getFood(foodId) -> Food:
-    sqlStatement = """SELECT shelfId, name, expiration, quantity
+    sqlStatement = """SELECT shelfId, name, expiration
                       FROM food
-                      WHERE foodId = '%s'""" %(foodId);
-    cursor.execute(sqlStatement);
-    food = cursor.fetchone();
-    db.commit();
-    return Food(foodId,food[0],food[1],food[2],food[3]);
+                      WHERE foodId = '%s'""" %(foodId)
+    cursor.execute(sqlStatement)
+    food = cursor.fetchone()
+    if(food):
+        db.commit()
+        return Food(id=foodId,name=food[0],expiration=food[1],quantity=food[2])
+    return None
 
 
 def getFood(foodName,expiration) -> Food:
@@ -92,10 +94,10 @@ def getFood(foodName,expiration) -> Food:
                       AND expiration = '%s'""" %(foodName,datetime.strptime(expiration, format));
     cursor.execute(sqlStatement);
     food = cursor.fetchone();
-    if food is None:
-        return food;
     db.commit();
-    return Food(food[0],foodName,expiration,food[1]);
+    if food is None:
+        return food
+    return Food(food[0],foodName,expiration,food[1])
 
 def useFood(food : Food):
     sqlStatement = """UPDATE food
