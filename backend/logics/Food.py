@@ -1,3 +1,6 @@
+from datetime import date, datetime
+
+
 SUCCESS = "Success Operation";
 UNSUCCESS = "Unsuccess Operation";
 
@@ -55,6 +58,8 @@ class Food:
     def __str__(self) -> str:
         return self.id + " " + self.name + " " + str(self.expiration) + " " + str(self.quantity);
     
+    # def __eq__(self, __o: object) -> bool:
+    #     return self.id == __o.id and self.expiration == __o.expiration and self.quantity == __o.quantity;
     
     def __hash__(self) -> int:
-        return hash(self.id + self.name + self.expiration * self.quantity)
+        return hash(self.id + self.name + self.expiration.__str__()* self.quantity)

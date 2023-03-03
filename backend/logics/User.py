@@ -38,8 +38,6 @@ class User:
         sql.removeShelf(shelf.id);
         
     def addFood(self, name, expiration):
-        food = sql.getFood(name,expiration)
-        print(food);
         if(len(self.shelves) == 0):
             newShelf = self.addShelf();
             newShelf.addFood(self.id, newShelf.id, name, expiration); 
@@ -47,18 +45,14 @@ class User:
         else:
             
             for shelf in self.shelves:
-                if food in shelf.container:
-                    shelf.addFood(self.id, shelf.id, name, expiration)
+                if shelf.empty():
+                    shelf.addFood(self.id, shelf.id, name, expiration);
                     break;
-                else:
-                    if shelf.empty():
-                        shelf.addFood(self.id, shelf.id, name, expiration);
-                        break;
         
                 
     def useFood(self, name, expiration):
+        food = sql.getFood(name, expiration);
         for s in self.shelves:
-            food = sql.getFood(name, expiration);
             if food in s.container:
                 s.useFood(food);
             
@@ -71,8 +65,3 @@ class User:
     def __str__(self) -> str:
         return "ID - " + self.id + " | NAME - "+self.name
     
-    
-    #technical debt, manage the workload, peak traffic, balanced the load, architecture
-    #business model, text stack, work-life balanced
-    #change something about your work, what do you think
-    #fav, improve?

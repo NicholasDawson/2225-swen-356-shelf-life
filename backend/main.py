@@ -10,20 +10,22 @@ sir = getUser("test1","123")
 newShelf = sir.addShelf();
 
 #add food to current existing shelf array
-sir.addFood("Tomato",expiration)
 
-print(sir.shelves[0].container)
-#testing if an item can be used 
-printTables()
+sir.addFood("Tomato",expiration)
+sir.addFood("Tomato",expiration)
+print((sir.shelves[0]))
+# print(sir.shelves[0].container)
+# #testing if an item can be used 
+# printTables()
+# sir.useFood("Tomato", expiration)
+# # sir.removeFood("Tomato", expiration)
+# print( getFood("Tomato",expiration) , " this is after remove and use")
+
 # print(newShelf.container)
-sir.useFood("Tomato", expiration)
-sir.removeFood("Tomato", expiration)
 
-print(newShelf.container)
-
-sir.addFood("Tomato",expiration)
-sir.addFood("Tomato", expiration)
-print(getFood("Tomato",expiration))
+# sir.addFood("Tomato",expiration)
+# sir.addFood("Tomato", expiration)
+# print(getFood("Tomato",expiration))
 
 
 # n1 = Shelf(1)

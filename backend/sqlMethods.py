@@ -1,13 +1,26 @@
+from datetime import datetime
 import os
 import psycopg2
 
-db = psycopg2.connect(os.getenv("DATABASE_URL"))
+# db = psycopg2.connect(os.getenv("DATABASE_URL"))
+
+from logics.Food import Food
+from logics.Shelf import Shelf
+from logics.User import User
+
+db = psycopg2.connect(
+  database = "shelflife",
+  user = "shelflife",
+  password = "12345",
+  host = "localhost",
+  port = '5432'
+)
 
 cursor = db.cursor();
 
-from logics.User import User
-from logics.Shelf import Shelf
-from logics.Food import Food
+# from User import User
+# from Shelf import Shelf
+# from Food import Food
 
 def execute_sql(filename):    
     executable = "";
@@ -28,23 +41,35 @@ def setup():
     execute_sql('database\create_food_table.sql');
 
 #food functionality
-def addFood(shelfId, userId, name, expiration):
+def addFood(shelfId, userId, name, expiration, quantity = 1):
 
     cursor.execute("""SELECT * FROM food
                       WHERE name = '%s' 
                       AND expiration = '%s'"""%(name, expiration))
-    if cursor.fetchone() == None:
+    found = cursor.fetchone();
+    if found == None:
         # sqlStatement = """UPDATE INTO shelf(shelfId, userId)
         #                   VALUES('%s', '%s')"""%(shelfId,userId)
         # cursor.execute(sqlStatement);
         sqlStatement = """INSERT INTO food(name, expiration, dateAdded)
                         VALUES('%s', '%s', CURRENT_DATE)""" %(name, expiration);
         cursor.execute(sqlStatement);
-        cursor.execute("""SELECT * FROM food
+        cursor.execute("""SELECT foodId,name,expiration,quantity FROM food
                       WHERE name = '%s' 
                       AND expiration = '%s'"""%(name, expiration))
         db.commit();
-        return cursor.fetchone()[0];
+        result = cursor.fetchone();
+        return Food(result[0],result[1],result[2],result[3]);
+    else:
+        cursor.execute("""UPDATE food
+                          SET quantity = %d
+                          WHERE name = '%s'
+                          AND expiration = '%s'""" %(quantity, name, expiration))
+        cursor.execute("""SELECT foodId,name,expiration,quantity FROM food
+                      WHERE name = '%s' 
+                      AND expiration = '%s'"""%(name, expiration))
+        result = cursor.fetchone()
+        return Food(result[0],result[1],result[2],result[3]);        
 
 
 
@@ -59,11 +84,12 @@ def getFood(foodId) -> Food:
 
 
 def getFood(foodName,expiration) -> Food:
-    print(foodName + " " + expiration)
+
+    format = '%Y-%m-%d'
     sqlStatement = """SELECT foodId, quantity
                       FROM food
                       WHERE name = '%s'
-                      AND expiration = '%s'""" %(foodName,expiration);
+                      AND expiration = '%s'""" %(foodName,datetime.strptime(expiration, format));
     cursor.execute(sqlStatement);
     food = cursor.fetchone();
     if food is None:
