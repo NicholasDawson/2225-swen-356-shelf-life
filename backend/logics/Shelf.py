@@ -14,7 +14,7 @@ class Shelf:
         return self.__container;
     
     #adding item to the back
-    def addFood(self, userId, shelfId, name, expiration):
+    def addFood(self, userId, shelfId, name, expiration, index = -1):
         item = sql.getFood(name,expiration)
         count = 0;
         if item is None:
@@ -24,12 +24,9 @@ class Shelf:
             else:
                 self.container.append(food);
         else:
-            for food in self.container:
-                if food == item:
-                    self.container[count] = food.increment();
-                    sql.addFood(shelfId, userId, item.name, food.expiration, food.quantity);
-                else:
-                    count+=1
+            if(index != -1):
+                self.container[index-1] = item.increment();
+                sql.addFood(shelfId, userId, item.name, item.expiration, item.quantity);
             
 
     def removeFood(self, food, userId, index):
@@ -45,12 +42,11 @@ class Shelf:
         else:
             print("there is no more")
         
+    
     #check if the container have available space
     def empty(self):
         result = False;
-        if ((len(self.container) < 3) and (None in self.container)):
-            return True;
-        elif ((len(self.container) < 3) or (None in self.container)):
+        if ((len(self.container) < 3) or (None in self.container)):
             return True;
         else :
             return False;

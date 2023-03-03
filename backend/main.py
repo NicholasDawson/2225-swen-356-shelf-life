@@ -36,10 +36,10 @@ sir.addFood("egg",expiration)
 sir.addFood("cheese",expiration)
 sir.addFood("milk",expiration)
 
-print(sir.shelves[0].container[1], "shelves1")
-print(sir.shelves[0].container[2], "shelves2")
-print(sir.shelves[1].container, "big shelf")
-
+print(sir.shelves[0].container[0], "shelves1")
+print(sir.shelves[0].container[1], "shelves2")
+print(sir.shelves[0].container[2], "big shelf")
+print(sir.shelves[1].container[0], "big shelf")
 
 
 # n1 = Shelf(1)

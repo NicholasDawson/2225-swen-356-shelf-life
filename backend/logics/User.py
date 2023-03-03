@@ -43,29 +43,19 @@ class User:
         
     def addFood(self, name, expiration):
         endOfArray = len(self.shelves)
-        counter = 1;
+        index = 1;
         if(len(self.shelves) == 0 ):
             self.newItemAdd(name,expiration)
-            return;
         else:
             for shelf in self.shelves:
                 if shelf.empty():
-                    shelf.addFood(self.id, shelf.id, name, expiration);
+                    shelf.addFood(self.id, shelf.id, name, expiration,index);
                     return;
-                elif counter == endOfArray:
+                elif index == endOfArray:
                     self.newItemAdd(name,expiration)
                     return;
                 else:
-                    counter+=1
-                    
-            # elif endOfArray == 0:
-            #     print(name)
-            #     newShelf = self.addShelf();
-            #     newShelf.addFood(self.id, newShelf.id, name, expiration); 
-            #     return;
-            # else:
-            #     endOfArray -=1
-                    
+                    index+=1
         
                 
     def useFood(self, name, expiration):
@@ -79,15 +69,15 @@ class User:
                 index += 1
             
                     
-    # def useFood(self, foodId):
-    #     index = 0
-    #     food = sql.getFood(foodId);
-    #     for s in self.shelves:
-    #         if food in s.container:
-    #             s.useFood(food, index);
-    #             return;
-    #         else:
-    #             index +=1
+    def useFoodById(self, foodId):
+        index = 0
+        food = sql.getFood(foodId);
+        for s in self.shelves:
+            if food in s.container:
+                s.useFood(food, index);
+                return;
+            else:
+                index +=1
             
     def removeFood(self, name, expiration):
         index = 0;
@@ -98,11 +88,14 @@ class User:
             else:
                 index += 1
                 
-    # def removeFood(self, foodId):
-    #     food = sql.getFood(foodId);
-    #     for shelf in self.shelves:
-    #         if food in shelf.container:
-    #             shelf.removeFood(food, self.id);
+    def removeFoodById(self, foodId):
+        index = 0;
+        food = sql.getFood(foodId);
+        for shelf in self.shelves:
+            if food in shelf.container:
+                shelf.removeFoodById(food, self.id, index);
+            else:
+                index += 1
     def __str__(self) -> str:
         return "ID - " + self.id + " | NAME - "+self.name
     
