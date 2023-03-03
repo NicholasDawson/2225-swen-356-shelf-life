@@ -24,23 +24,26 @@ class Shelf:
             for food in self.container:
                 if food == item:
                     self.container[count] = food.increment();
-                    sql.addFood(shelfId, userId, item.name, item.expiration, item.quantity);
+                    sql.addFood(shelfId, userId, item.name, food.expiration, food.quantity);
                 else:
                     count+=1
             
 
-    def removeFood(self, item ):
-        if item in self.container:
-            self.container[self.container.index(item)] = None;
-            sql.removeFood(item, self.id)
+    def removeFood(self, food, userId):
+        if food in self.container:
+            self.container[self.container.index(food)] = None;
+            sql.removeFood(food, self.id, userId)
+            
             
     def useFood(self, item):
         if(item.quantity > 0):
             for e in self.__container:
                 if(e == item):
                   updatedFood = item.decrement();
-                  sql.useFood(updatedFood, self.id);
+                  sql.useFood(updatedFood);
                   self.container[self.container.index(e)] = updatedFood;
+        else:
+            print("there is no more")
         
     #check if the container have available space
     def empty(self):

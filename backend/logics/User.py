@@ -47,7 +47,7 @@ class User:
             for shelf in self.shelves:
                 if shelf.empty():
                     shelf.addFood(self.id, shelf.id, name, expiration);
-                    break;
+                    return;
         
                 
     def useFood(self, name, expiration):
@@ -55,12 +55,13 @@ class User:
         for s in self.shelves:
             if food in s.container:
                 s.useFood(food);
+                return;
             
     def removeFood(self, name, expiration):
-        for s in self.shelves:
+        for shelf in self.shelves:
             food = sql.getFood(name, expiration);
-            if food in s.container:
-                s.remove(food);
+            if food in shelf.container:
+                shelf.removeFood(food, self.id);
     
     def __str__(self) -> str:
         return "ID - " + self.id + " | NAME - "+self.name

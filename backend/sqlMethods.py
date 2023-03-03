@@ -48,9 +48,7 @@ def addFood(shelfId, userId, name, expiration, quantity = 1):
                       AND expiration = '%s'"""%(name, expiration))
     found = cursor.fetchone();
     if found == None:
-        # sqlStatement = """UPDATE INTO shelf(shelfId, userId)
-        #                   VALUES('%s', '%s')"""%(shelfId,userId)
-        # cursor.execute(sqlStatement);
+        
         sqlStatement = """INSERT INTO food(name, expiration, dateAdded)
                         VALUES('%s', '%s', CURRENT_DATE)""" %(name, expiration);
         cursor.execute(sqlStatement);
@@ -59,6 +57,11 @@ def addFood(shelfId, userId, name, expiration, quantity = 1):
                       AND expiration = '%s'"""%(name, expiration))
         db.commit();
         result = cursor.fetchone();
+        sqlStatement = """UPDATE shelf
+                          SET foodId = '%s'
+                          WHERE shelfId = '%s'
+                          AND userId = '%s'"""%(result[0],shelfId,userId)
+        cursor.execute(sqlStatement);
         return Food(result[0],result[1],result[2],result[3]);
     else:
         cursor.execute("""UPDATE food
@@ -106,11 +109,25 @@ def useFood(food : Food):
     cursor.execute(sqlStatement);
     db.commit();
 
-def removeFood(food: Food, shelfId):
+def useFood(food : Food):
+    sqlStatement = """UPDATE food
+                    SET quantity = %d
+                    WHERE foodId = '%s'"""%(food.quantity, food.id)
+    cursor.execute(sqlStatement);
+    db.commit();
+
+def removeFood(food: Food, shelfId, userId):
     sqlStatement = """DELETE from food
                     WHERE foodId = '%s'
-                    AND shelfId = '%s'"""%(food.id, shelfId)
+                   """%(food.id)
     cursor.execute(sqlStatement);
+    sqlStatement = """UPDATE shelf
+                      SET foodId = Null
+                      WHERE shelfId = '%s'
+                      AND foodId = '%s'
+                      AND userId = '%s'""" %(shelfId, food.id, userId)
+    cursor.execute(sqlStatement)
+    
     db.commit();
     
 #shelves functionality

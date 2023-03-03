@@ -14,18 +14,24 @@ newShelf = sir.addShelf();
 sir.addFood("Tomato",expiration)
 sir.addFood("Tomato",expiration)
 print((sir.shelves[0].container[0]))
-# print(sir.shelves[0].container)
+print(getFood("Tomato", expiration), "databaes")
+print("\n")
 # #testing if an item can be used 
 # printTables()
-# sir.useFood("Tomato", expiration)
-# # sir.removeFood("Tomato", expiration)
-# print( getFood("Tomato",expiration) , " this is after remove and use")
+sir.useFood("Tomato", expiration)
+sir.useFood("Tomato", expiration)
+sir.useFood("Tomato", expiration)
 
-# print(newShelf.container)
+print(sir.shelves[0].container[0], "array container")
+sir.addFood("Tomato",expiration) 
+sir.addFood("Tomato", expiration)
+print("\n")
+print(sir.shelves[0].container[0], "array container")
+print(getFood("Tomato", expiration), "databaes")
+sir.removeFood("Tomato", expiration)
 
-# sir.addFood("Tomato",expiration)
-# sir.addFood("Tomato", expiration)
-# print(getFood("Tomato",expiration))
+print(getFood("Tomato", expiration), "databaes")
+
 
 
 # n1 = Shelf(1)
