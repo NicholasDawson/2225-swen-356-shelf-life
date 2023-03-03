@@ -4,7 +4,6 @@ UNSUCCESS = "Unsuccess Operation";
 class Food:
     def __init__(self, id, name, expiration, quantity):
         self.__id = id;
-        # self.__shelfId = shelfId;
         self.__name = name;
         self.__expiration = expiration;
         self.__quantity = quantity;
@@ -54,10 +53,8 @@ class Food:
         return self;
     
     def __str__(self) -> str:
-        return self.id + " " + self.shelfId+ " " + self.name + " " + str(self.expiration) + " " + str(self.quantity);
+        return self.id + " " + self.name + " " + str(self.expiration) + " " + str(self.quantity);
     
-    def __eq__(self, __o: object) -> bool:
-        return (self.id == __o.id) and (self.expiration == __o.expiration) and (self.shelfId == __o.shelfId) and (self.quantity == __o.quantity) ;
     
     def __hash__(self) -> int:
-        return hash(self.id + self.name+ self.quantity * self.expiration)
+        return hash(self.id + self.name + self.expiration * self.quantity)

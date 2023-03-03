@@ -62,15 +62,16 @@ def getFood(foodId) -> Food:
 
 
 def getFood(foodName,expiration) -> Food:
+    print(foodName + " " + expiration)
     sqlStatement = """SELECT foodId, quantity
                       FROM food
                       WHERE name = '%s'
                       AND expiration = '%s'""" %(foodName,expiration);
     cursor.execute(sqlStatement);
     food = cursor.fetchone();
-    db.commit();
     if food is None:
         return food;
+    db.commit();
     return Food(food[0],foodName,expiration,food[1]);
 
 def useFood(food : Food):

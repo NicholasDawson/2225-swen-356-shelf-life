@@ -1,4 +1,5 @@
 from sqlMethods import *
+expiration = "2016-06-22";
 
 #create user
 setup()
@@ -6,20 +7,23 @@ addUser("test1","123")
 sir = getUser("test1","123")
 
 # #create a new shelf
-# newShelf = sir.addShelf();
+newShelf = sir.addShelf();
 
 #add food to current existing shelf array
-sir.addFood("Tomato","2016-06-22")
+sir.addFood("Tomato",expiration)
 
 print(sir.shelves[0].container)
 #testing if an item can be used 
 printTables()
 # print(newShelf.container)
-# sir.useFood("Tomato", "2016-06-22")
+sir.useFood("Tomato", expiration)
+sir.removeFood("Tomato", expiration)
 
-# sir.removeFood("Tomato", "2016-06-22")
+print(newShelf.container)
 
-# print(newShelf.container)
+sir.addFood("Tomato",expiration)
+sir.addFood("Tomato", expiration)
+print(getFood("Tomato",expiration))
 
 
 # n1 = Shelf(1)
