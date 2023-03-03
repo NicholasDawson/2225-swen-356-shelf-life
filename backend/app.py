@@ -14,7 +14,6 @@ from sqlMethods import *
 load_dotenv()
 
 conn = psycopg2.connect(os.getenv("DATABASE_URL"))
-setup()
 with conn.cursor() as cur:
     cur.execute("SELECT * FROM Food")
     res = cur.fetchall()
@@ -44,8 +43,11 @@ def get_Food(id):
     
 
 @app.route('/food', methods=['POST'])
-def create_food(name, expiration):
-    food = addFood(None, None, name, expiration)
+def create_food():
+    data = request.json
+    name = data.get('name')
+    expiration_date = data.get('expiration_date')
+    food = addFood(None, None, name, expiration_date)
     return jsonify(food.__dict__)
 
 @app.route('/food/<string:id>', methods=['PUT'])

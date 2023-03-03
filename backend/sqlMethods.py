@@ -2,19 +2,19 @@ from datetime import datetime
 import os
 import psycopg2
 
-# db = psycopg2.connect(os.getenv("DATABASE_URL"))
+db = psycopg2.connect(os.getenv("DATABASE_URL"))
 
 from logics.Food import Food
 from logics.Shelf import Shelf
 from logics.User import User
 
-db = psycopg2.connect(
-  database = "shelflife",
-  user = "shelflife",
-  password = "12345",
-  host = "localhost",
-  port = '5432'
-)
+# db = psycopg2.connect(
+#   database = "shelflife",
+#   user = "shelflife",
+#   password = "12345",
+#   host = "localhost",
+#   port = '5432'
+# )
 
 cursor = db.cursor();
 
