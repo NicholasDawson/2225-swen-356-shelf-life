@@ -13,7 +13,7 @@ newShelf = sir.addShelf();
 
 sir.addFood("Tomato",expiration)
 sir.addFood("Tomato",expiration)
-print((sir.shelves[0]))
+print((sir.shelves[0].container))
 # print(sir.shelves[0].container)
 # #testing if an item can be used 
 # printTables()

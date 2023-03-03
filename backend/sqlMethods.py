@@ -36,9 +36,9 @@ def printTables():
       print(table)
     
 def setup():
-    execute_sql('../database/create_shelf_table.sql')
-    execute_sql("../database/create_user_table.sql");
-    execute_sql('../database/create_food_table.sql');
+    execute_sql('database/create_shelf_table.sql')
+    execute_sql("database/create_user_table.sql");
+    execute_sql('database/create_food_table.sql');
 
 #food functionality
 def addFood(shelfId, userId, name, expiration, quantity = 1):
