@@ -7,13 +7,14 @@ import psycopg2
 
 from dotenv import load_dotenv
 
-from backend.logics.Food import Food 
-from backend.logics import *
+from logics.Food import Food 
+from logics import *
 from sqlMethods import *
 
 load_dotenv()
 
 conn = psycopg2.connect(os.getenv("DATABASE_URL"))
+setup()
 with conn.cursor() as cur:
     cur.execute("SELECT * FROM Food")
     res = cur.fetchall()
@@ -34,12 +35,12 @@ def get_all_Food():
         foods.append(Food(row[0], row[1], row[2], row[3], row[4]))
     return jsonify([my_object.__dict__ for my_object in foods])
 
-@app.route('/food/<int:id>', methods=['GET'])
+@app.route('/food/<string:id>', methods=['GET'])
 def get_Food(id):
     fode = getFood(id)
     if fode:
         return jsonify(fode.__dict__)
-    return jsonify({'message': 'My object not found'}), 404
+    return jsonify({'message': 'Food not found'}), 404
     
 
 @app.route('/food', methods=['POST'])
@@ -47,7 +48,7 @@ def create_food(name, expiration):
     food = addFood(None, None, name, expiration)
     return jsonify(food.__dict__)
 
-@app.route('/food/<int:id>', methods=['PUT'])
+@app.route('/food/<string:id>', methods=['PUT'])
 def update_my_object(id):
     data = request.get_json()
     cur = conn.cursor()
@@ -58,7 +59,7 @@ def update_my_object(id):
     my_object = Food(row[0], row[1], row[2], row[3])
     return jsonify(my_object.__dict__)
 
-@app.route('/food/<int:id>', methods=['DELETE'])
+@app.route('/food/<string:id>', methods=['DELETE'])
 def delete_my_object(id):
     cur = conn.cursor()
     cur.execute("DELETE FROM food WHERE id = %s", (id,))

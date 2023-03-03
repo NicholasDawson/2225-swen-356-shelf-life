@@ -23,9 +23,9 @@ def printTables():
       print(table)
     
 def setup():
-    execute_sql('database\create_shelf_table.sql')
-    execute_sql("database\create_user_table.sql");
-    execute_sql('database\create_food_table.sql');
+    execute_sql('../database/create_shelf_table.sql')
+    execute_sql("../database/create_user_table.sql");
+    execute_sql('../database/create_food_table.sql');
 
 #food functionality
 def addFood(shelfId, userId, name, expiration):
@@ -50,16 +50,18 @@ def addFood(shelfId, userId, name, expiration):
 
 
 def getFood(foodId) -> Food:
-    sqlStatement = """SELECT shelfId, name, expiration, quantity
+    sqlStatement = """SELECT shelfId, name, expiration
                       FROM food
                       WHERE foodId = '%s'""" %(foodId)
     cursor.execute(sqlStatement)
     food = cursor.fetchone()
-    db.commit()
-    return Food(foodId,food[0],food[1],food[2],food[3])
+    if(food):
+        db.commit()
+        return Food(id=foodId,name=food[0],expiration=food[1],quantity=food[2])
+    return None
 
 
-def getFood(foodName,expiration) -> Food:
+def getFoodWithExpiration(foodName,expiration) -> Food:
     print(foodName + " " + expiration)
     sqlStatement = """SELECT foodId, quantity
                       FROM food
