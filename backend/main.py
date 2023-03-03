@@ -31,6 +31,15 @@ sir.removeFood("Tomato", expiration)
 print(getFood("Tomato", expiration), "databaes")
 
 
+sir.addFood("pickle",expiration)
+sir.addFood("egg",expiration)
+sir.addFood("cheese",expiration)
+sir.addFood("milk",expiration)
+
+print(sir.shelves[0].container[1], "shelves1")
+print(sir.shelves[0].container[2], "shelves2")
+print(sir.shelves[1].container, "big shelf")
+
 
 
 # n1 = Shelf(1)

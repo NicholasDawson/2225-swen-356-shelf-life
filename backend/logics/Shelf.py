@@ -17,9 +17,12 @@ class Shelf:
     def addFood(self, userId, shelfId, name, expiration):
         item = sql.getFood(name,expiration)
         count = 0;
-        if item not in self.container:
+        if item is None:
             food = sql.addFood(shelfId, userId, name, expiration)
-            self.container.append(food);
+            if None in self.container:
+                self.container[self.container.index(None)] = food
+            else:
+                self.container.append(food);
         else:
             for food in self.container:
                 if food == item:
@@ -29,25 +32,25 @@ class Shelf:
                     count+=1
             
 
-    def removeFood(self, food, userId):
-        if food in self.container:
-            self.container[self.container.index(food)] = None;
-            sql.removeFood(food, self.id, userId)
+    def removeFood(self, food, userId, index):
+        self.container[index] = None;
+        sql.removeFood(food, self.id, userId)
             
             
-    def useFood(self, item):
+    def useFood(self, item, index):
         if(item.quantity > 0):
-            for e in self.__container:
-                if(e == item):
-                  updatedFood = item.decrement();
-                  sql.useFood(updatedFood);
-                  self.container[self.container.index(e)] = updatedFood;
+            updatedFood = item.decrement();
+            sql.useFood(updatedFood);
+            self.container[index] = updatedFood;
         else:
             print("there is no more")
         
     #check if the container have available space
     def empty(self):
-        if ((len(self.container) < 3) or (None in self.__container)):
+        result = False;
+        if ((len(self.container) < 3) and (None in self.container)):
             return True;
-        else:
+        elif ((len(self.container) < 3) or (None in self.container)):
+            return True;
+        else :
             return False;
