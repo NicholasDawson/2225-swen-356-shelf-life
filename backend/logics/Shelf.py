@@ -45,7 +45,6 @@ class Shelf:
     
     #check if the container have available space
     def empty(self):
-        result = False;
         if ((len(self.container) < 3) or (None in self.container)):
             return True;
         else :

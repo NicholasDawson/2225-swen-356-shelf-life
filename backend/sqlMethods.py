@@ -8,14 +8,6 @@ from logics.Food import Food
 from logics.Shelf import Shelf
 from logics.User import User
 
-# db = psycopg2.connect(
-#   database = "shelflife",
-#   user = "shelflife",
-#   password = "12345",
-#   host = "localhost",
-#   port = '5432'
-# )
-
 cursor = db.cursor();
 
 # from User import User
