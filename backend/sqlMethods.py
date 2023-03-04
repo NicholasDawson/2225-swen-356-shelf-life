@@ -108,18 +108,12 @@ def useFood(food : Food):
     cursor.execute(sqlStatement);
     db.commit();
 
-def removeFood(food: Food, shelfId, userId):
+#Can be used with or without a shelf or user ID
+def removeFood(foodId, shelfId, userId):
     sqlStatement = """DELETE from food
                     WHERE foodId = '%s'
-                   """%(food.id)
+                   """%(foodId)
     cursor.execute(sqlStatement);
-    sqlStatement = """UPDATE shelf
-                      SET foodId = Null
-                      WHERE shelfId = '%s'
-                      AND foodId = '%s'
-                      AND userId = '%s'""" %(shelfId, food.id, userId)
-    cursor.execute(sqlStatement)
-    
     db.commit();
     
 #shelves functionality
