@@ -66,7 +66,7 @@ def update_food(id):
 @app.route('/food/<string:id>', methods=['DELETE'])
 def delete_food(id):
     data = request.json
-    removeFood(id, userId=data['userId'], shelfId=data['shelfId'])
+    removeFood(id, None, None)
     response = jsonify({'message': 'Food removed successfully'})
     return response, 204
 
