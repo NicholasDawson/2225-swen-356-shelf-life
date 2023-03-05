@@ -16,18 +16,18 @@ class Shelf:
     #adding item to the back
     def addFood(self, userId, shelfId, name, expiration, index = -1):
         item = sql.getFood(name,expiration)
-        count = 0;
+        foodResult = None;
         if item is None:
-            food = sql.addFood(shelfId, userId, name, expiration)
+            foodResult = sql.addFood(shelfId, userId, name, expiration)
             if None in self.container:
-                self.container[self.container.index(None)] = food
+                self.container[self.container.index(None)] = foodResult
             else:
-                self.container.append(food);
+                self.container.append(foodResult);
         else:
             if(index != -1):
                 self.container[index-1] = item.increment();
-                sql.addFood(shelfId, userId, item.name, item.expiration, item.quantity);
-            
+                foodResult = sql.addFood(shelfId, userId, item.name, item.expiration, item.quantity);
+        return foodResult
 
     def removeFood(self, food, userId, index):
         self.container[index] = None;

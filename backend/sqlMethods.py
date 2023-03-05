@@ -82,7 +82,6 @@ def getFood(foodId) -> Food:
 
 
 def getFood(foodName,expiration) -> Food:
-
     format = '%Y-%m-%d'
     sqlStatement = """SELECT foodId, quantity
                       FROM food
@@ -94,6 +93,20 @@ def getFood(foodName,expiration) -> Food:
     if food is None:
         return food
     return Food(food[0],foodName,expiration,food[1])
+
+
+
+def getFoodById(id) -> Food:
+    sqlStatement = """SELECT *
+                      FROM food
+                      WHERE id = '%s'
+                      """ %(id);
+    cursor.execute(sqlStatement);
+    food = cursor.fetchone();
+    db.commit();
+    if food is None:
+        return food
+    return Food(food[0],food[1],food[2],food[3])
 
 def useFood(food : Food):
     sqlStatement = """UPDATE food
@@ -148,6 +161,7 @@ def addUser(usn,pwd):
     """%(usn,pwd)
     cursor.execute(sqlStatement);
     db.commit();
+    
     
 def getUser(usn,pwd) -> User:
     cursor.execute("""SELECT userID 

@@ -39,21 +39,22 @@ class User:
         
     def newItemAdd(self, name, expiration):
         newShelf = self.addShelf();
-        newShelf.addFood(self.id, newShelf.id, name, expiration); 
+        return newShelf.addFood(self.id, newShelf.id, name, expiration); 
         
     def addFood(self, name, expiration):
         endOfArray = len(self.shelves)
         index = 1;
+        result = None;
         if(len(self.shelves) == 0 ):
-            self.newItemAdd(name,expiration)
+            return self.newItemAdd(name,expiration)
         else:
             for shelf in self.shelves:
                 if shelf.empty():
-                    shelf.addFood(self.id, shelf.id, name, expiration,index);
-                    return;
+                    result = shelf.addFood(self.id, shelf.id, name, expiration,index);
+                    return result;
                 elif index == endOfArray:
-                    self.newItemAdd(name,expiration)
-                    return;
+                    result = self.newItemAdd(name,expiration)
+                    return result;
                 else:
                     index+=1
         

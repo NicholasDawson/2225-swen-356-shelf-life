@@ -37,7 +37,7 @@ def get_all_Food():
 
 @app.route('/food/<string:id>', methods=['GET'])
 def get_Food(id):
-    fode = getFood(id)
+    fode = getFoodById(id)
     if fode:
         return jsonify(fode.__dict__)
     return jsonify({'message': 'Food not found'}), 404
@@ -48,8 +48,17 @@ def create_food():
     data = request.json
     name = data.get('name')
     expiration_date = data.get('expiration_date')
-    food = addFood(None, None, name, expiration_date)
+    food = user.addFood(name,expiration_date)
     return jsonify(food.__dict__)
+
+@app.route('/food/<string:id>', methods=['PUT'])
+def use_food(id):
+    data = request.get_json()
+    user.useFoodById(id)
+    cur.execute("SELECT * FROM my_objects WHERE id = %s", (id,))
+    row = cur.fetchone()
+    my_object = Food(row[0], row[1], row[2], row[3])
+    return jsonify(my_object.__dict__), 200
 
 #TODO uncertain if this on is necessary could be helpful to change the expiration date
 @app.route('/food/<string:id>', methods=['PUT'])
@@ -66,7 +75,7 @@ def update_food(id):
 @app.route('/food/<string:id>', methods=['DELETE'])
 def delete_food(id):
     data = request.json
-    removeFood(id, None, None)
+    user.removeFoodById(id)
     response = jsonify({'message': 'Food removed successfully'})
     return response, 204
 
@@ -101,7 +110,6 @@ def home():
 @app.route('/login')
 def login():
     redirect_uri = url_for('authorize', _external=True)
-    print(redirect_uri["id"])
     return google.authorize_redirect(redirect_uri)
 
 @app.route('/authorize')
@@ -114,6 +122,7 @@ def authorize():
     userinfo = resp.json()
     # do something with the token and profile
     print(json.dumps(userinfo, indent=4))
+    print(userinfo["id"])
     session['profile'] = userinfo
 
     return redirect('/')
