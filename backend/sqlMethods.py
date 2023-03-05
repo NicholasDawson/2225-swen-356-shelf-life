@@ -2,11 +2,12 @@ from datetime import datetime
 import os
 import psycopg2
 
-db = psycopg2.connect(os.getenv("DATABASE_URL"))
-
+from dotenv import load_dotenv
 from logics.Food import Food
 from logics.Shelf import Shelf
 from logics.User import User
+load_dotenv()
+db = psycopg2.connect(os.getenv("DATABASE_URL"))
 
 cursor = db.cursor();
 

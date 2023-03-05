@@ -13,6 +13,7 @@ from sqlMethods import *
 
 load_dotenv()
 
+user = User(None,None,None)
 conn = psycopg2.connect(os.getenv("DATABASE_URL"))
 with conn.cursor() as cur:
     cur.execute("SELECT * FROM Food")
@@ -100,6 +101,7 @@ def home():
 @app.route('/login')
 def login():
     redirect_uri = url_for('authorize', _external=True)
+    print(redirect_uri["id"])
     return google.authorize_redirect(redirect_uri)
 
 @app.route('/authorize')
