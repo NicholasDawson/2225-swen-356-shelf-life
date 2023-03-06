@@ -1,16 +1,84 @@
-from flask import Flask, url_for, redirect, session
+from flask import Flask, jsonify, request, url_for, redirect, session
 from authlib.integrations.flask_client import OAuth
 import json
 import os
+import psycopg2
+
 
 from dotenv import load_dotenv
+
+from logics.Food import Food 
+from logics import *
+from sqlMethods import *
+
 load_dotenv()
 
+user = User(None,None,None)
+conn = psycopg2.connect(os.getenv("DATABASE_URL"))
+with conn.cursor() as cur:
+    cur.execute("SELECT * FROM Food")
+    res = cur.fetchall()
+    conn.commit()
+    print(res)
 
 app = Flask(__name__)
 app.secret_key = os.getenv("APP_SECRET_KEY")
 
 # oauth config
+@app.route('/Food', methods=['GET'])
+def get_all_Food():
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM Food")
+    rows = cur.fetchall()
+    foods = []
+    for row in rows:
+        foods.append(Food(row[0], row[1], row[2], row[3], row[4]))
+    return jsonify([my_object.__dict__ for my_object in foods])
+
+@app.route('/food/<string:id>', methods=['GET'])
+def get_Food(id):
+    fode = getFoodById(id)
+    if fode:
+        return jsonify(fode.__dict__)
+    return jsonify({'message': 'Food not found'}), 404
+    
+
+@app.route('/food', methods=['POST'])
+def create_food():
+    data = request.json
+    name = data.get('name')
+    expiration_date = data.get('expiration_date')
+    food = user.addFood(name,expiration_date)
+    return jsonify(food.__dict__)
+
+@app.route('/food/<string:id>', methods=['PUT'])
+def use_food(id):
+    data = request.get_json()
+    user.useFoodById(id)
+    cur.execute("SELECT * FROM my_objects WHERE id = %s", (id,))
+    row = cur.fetchone()
+    my_object = Food(row[0], row[1], row[2], row[3])
+    return jsonify(my_object.__dict__), 200
+
+#TODO uncertain if this on is necessary could be helpful to change the expiration date
+@app.route('/food/<string:id>', methods=['PUT'])
+def update_food(id):
+    data = request.get_json()
+    cur = conn.cursor()
+    cur.execute("UPDATE Food SET name = %s, expiration = %s, quantity = %s WHERE id = %s", (data['name'], data['expiration'], data['quantity'], id))
+    conn.commit()
+    cur.execute("SELECT * FROM my_objects WHERE id = %s", (id,))
+    row = cur.fetchone()
+    my_object = Food(row[0], row[1], row[2], row[3])
+    return jsonify(my_object.__dict__), 200
+
+@app.route('/food/<string:id>', methods=['DELETE'])
+def delete_food(id):
+    data = request.json
+    user.removeFoodById(id)
+    response = jsonify({'message': 'Food removed successfully'})
+    return response, 204
+
 oauth = OAuth(app)
 # TODO: make the client ID and the secret env variables
 google = oauth.register(
@@ -27,6 +95,9 @@ google = oauth.register(
     client_kwargs={'scope': 'openid email profile'},
 )
 
+# @app.route('/add/<>')
+# def addFood():
+#     return
 
 @app.route('/')
 def home():
@@ -51,6 +122,7 @@ def authorize():
     userinfo = resp.json()
     # do something with the token and profile
     print(json.dumps(userinfo, indent=4))
+    print(userinfo["id"])
     session['profile'] = userinfo
 
     return redirect('/')
