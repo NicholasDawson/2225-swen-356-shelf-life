@@ -95,7 +95,7 @@ def getFood(foodName,expiration) -> Food:
 def getFoodById(id) -> Food:
     sqlStatement = """SELECT *
                       FROM food
-                      WHERE foodId = '%s'
+                      WHERE id = '%s'
                       """ %(id);
     cursor.execute(sqlStatement);
     food = cursor.fetchone();

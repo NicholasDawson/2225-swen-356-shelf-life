@@ -1,0 +1,12 @@
+<?xml version="1.0" standalone="yes"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256">
+<path style="fill:#ffffff; stroke:none;" d="M0 0L0 256L256 256L256 0L0 0z"/>
+<path style="fill:#7d7d7d; stroke:none;" d="M37 16L38 17L37 16z"/>
+<path style="fill:#252525; stroke:none;" d="M32 240L48 240L48 32L208 32L208 240L224 240L224 83L224 40C224 34.4292 225.518 26.1008 222.821 21.044C220.35 16.4119 215.686 16.0255 211 16.0008C201.334 15.9498 191.666 16 182 16L71 16L46 16C41.4138 16.0077 36.6635 15.9101 33.7423 20.1088C30.5426 24.7077 32 32.6824 32 38L32 80L32 240z"/>
+<path style="fill:#7d7d7d; stroke:none;" d="M218 16L219 17L218 16z"/>
+<path style="fill:#7c7c7c; stroke:none;" d="M35 17L36 18L35 17M220 17L221 18L220 17z"/>
+<path style="fill:#595959; stroke:none;" d="M34 18L35 19L34 18M221 18L222 19L221 18z"/>
+<path style="fill:#7c7c7c; stroke:none;" d="M33 19L34 20L33 19M222 19L223 20L222 19z"/>
+<path style="fill:#7d7d7d; stroke:none;" d="M32 21L33 22L32 21M223 21L224 22L223 21z"/>
+<path style="fill:#252525; stroke:none;" d="M56 80L56 96L200 96L200 80L56 80M56 144L56 160L200 160L200 144L56 144M56 208L56 224L200 224L200 208L56 208z"/>
+</svg>
