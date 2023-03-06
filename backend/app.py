@@ -13,7 +13,7 @@ from sqlMethods import *
 
 load_dotenv()
 
-user = User(None,None,None)
+user = User(None,None)
 conn = psycopg2.connect(os.getenv("DATABASE_URL"))
 with conn.cursor() as cur:
     cur.execute("SELECT * FROM Food")
@@ -55,9 +55,8 @@ def create_food():
 def use_food(id):
     data = request.get_json()
     user.useFoodById(id)
-    cur.execute("SELECT * FROM my_objects WHERE id = %s", (id,))
-    row = cur.fetchone()
-    my_object = Food(row[0], row[1], row[2], row[3])
+    food = getFoodById(id)
+    my_object = Food(food[0], food[1], food[2], food[3])
     return jsonify(my_object.__dict__), 200
 
 #TODO uncertain if this on is necessary could be helpful to change the expiration date
@@ -124,7 +123,9 @@ def authorize():
     print(json.dumps(userinfo, indent=4))
     print(userinfo["id"])
     session['profile'] = userinfo
-
+    email = userinfo["email"]
+    addUser(email)
+    user = getUser(email)
     return redirect('/')
 
 @app.route('/logout')
