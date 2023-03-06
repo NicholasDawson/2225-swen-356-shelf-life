@@ -94,10 +94,6 @@ google = oauth.register(
     client_kwargs={'scope': 'openid email profile'},
 )
 
-# @app.route('/add/<>')
-# def addFood():
-#     return
-
 @app.route('/')
 def home():
     if 'profile' in session:
@@ -132,6 +128,11 @@ def authorize():
 def logout():
     session.clear()
     return redirect('/')
+
+@app.route('/log')
+def consoleLog():
+    print(user)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
