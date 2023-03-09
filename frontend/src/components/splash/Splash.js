@@ -23,7 +23,7 @@ class Splash extends Component {
   render() {
     return (
       <main>
-        <div className="container w-100 m-0">
+        <div className="container w-100">
           <div className="row vh-100">
             <div className="col-4 bg-blue d-flex flex-column justify-content-center text-center px-5">
               <h1>
@@ -59,9 +59,6 @@ class Splash extends Component {
                         heading. We'll add onto it with another sentence and
                         probably just keep going until we run out of words.
                       </p>
-                      <a href="#" className="btn btn-primary">
-                        Primary button
-                      </a>
                     </div>
                   </div>
                   <div className="col d-flex align-items-start">
@@ -80,9 +77,6 @@ class Splash extends Component {
                         heading. We'll add onto it with another sentence and
                         probably just keep going until we run out of words.
                       </p>
-                      <a href="#" className="btn btn-primary">
-                        Primary button
-                      </a>
                     </div>
                   </div>
                   <div className="col d-flex align-items-start">
@@ -96,9 +90,6 @@ class Splash extends Component {
                         heading. We'll add onto it with another sentence and
                         probably just keep going until we run out of words.
                       </p>
-                      <a href="#" className="btn btn-primary">
-                        Primary button
-                      </a>
                     </div>
                   </div>
                   <div className="col d-flex align-items-start">
@@ -112,9 +103,6 @@ class Splash extends Component {
                         heading. We'll add onto it with another sentence and
                         probably just keep going until we run out of words.
                       </p>
-                      <a href="#" className="btn btn-primary">
-                        Primary button
-                      </a>
                     </div>
                   </div>
                 </div>
