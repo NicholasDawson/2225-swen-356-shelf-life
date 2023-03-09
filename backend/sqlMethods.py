@@ -11,10 +11,6 @@ db = psycopg2.connect(os.getenv("DATABASE_URL"))
 
 cursor = db.cursor();
 
-# from User import User
-# from Shelf import Shelf
-# from Food import Food
-
 def execute_sql(filename):    
     executable = "";
     with open(filename) as f:
@@ -154,24 +150,23 @@ def getShelf(userUID) -> Shelf:
 
 #users functionality
 #--------------------------------------
-def addUser(usn,pwd):
+def addUser(usn):
     sqlStatement = """
-        INSERT INTO users(username, password)
-        VALUES('%s','%s');
-    """%(usn,pwd)
+        INSERT INTO users(username)
+        VALUES('%s');
+    """%(usn)
     cursor.execute(sqlStatement);
     db.commit();
     
     
-def getUser(usn,pwd) -> User:
+def getUser(usn) -> User:
     cursor.execute("""SELECT userID 
                              FROM users
                              WHERE username = '%s'
-                             AND password = '%s'
-                             """%(usn,pwd));
+                             """%(usn));
     id = cursor.fetchone();
     db.commit();
-    return User(id[0],usn,pwd)
+    return User(id[0],usn)
 
 
 

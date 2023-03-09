@@ -1,11 +1,9 @@
-from logics import Food
 import sqlMethods as sql;
 
 class User:
-    def __init__(self, id, name, pwd):
+    def __init__(self, id, name):
         self.__id = id;
         self.__name = name;
-        self.__pwd = pwd;
         self.__shelves = [];
         
     @property
@@ -15,10 +13,7 @@ class User:
     @property
     def name(self):
         return self.__name;
-    
-    @property
-    def pwd(self):
-        return self.__pwd;
+
     
     @property
     def shelves(self):
@@ -97,6 +92,7 @@ class User:
                 shelf.removeFoodById(food, self.id, index);
             else:
                 index += 1
+                
     def __str__(self) -> str:
         return "ID - " + self.id + " | NAME - "+self.name
     
