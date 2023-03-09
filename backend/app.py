@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request, url_for, redirect, session
+from flask_cors import CORS
 from authlib.integrations.flask_client import OAuth
 import json
 import os
@@ -23,6 +24,8 @@ with conn.cursor() as cur:
 
 app = Flask(__name__)
 app.secret_key = os.getenv("APP_SECRET_KEY")
+print([os.getenv("FRONTEND_URL")])
+CORS(app, origins=[os.getenv("FRONTEND_URL")])
 
 # oauth config
 @app.route('/Food', methods=['GET'])
