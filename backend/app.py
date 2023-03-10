@@ -14,14 +14,19 @@ from sqlMethods import *
 
 load_dotenv()
 
-user = User(None,None)
+user = None;
 conn = psycopg2.connect(os.getenv("DATABASE_URL"))
 with conn.cursor() as cur:
     cur.execute("SELECT * FROM Food")
     res = cur.fetchall()
     conn.commit()
     print(res)
-
+    
+    cur.execute("SELECT * FROM users")
+    res = cur.fetchall()
+    conn.commit()
+    print(res)
+    
 app = Flask(__name__)
 app.secret_key = os.getenv("APP_SECRET_KEY")
 print([os.getenv("FRONTEND_URL")])
@@ -123,8 +128,7 @@ def authorize():
     print(userinfo["id"])
     session['profile'] = userinfo
     email = userinfo["email"]
-    addUser(email)
-    user = getUser(email)
+    user = addUser(email)
     return redirect('/')
 
 @app.route('/logout')
@@ -135,6 +139,8 @@ def logout():
 @app.route('/log')
 def consoleLog():
     print(user)
+    return redirect("/")
+    
 
 
 if __name__ == '__main__':
