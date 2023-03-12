@@ -12,7 +12,6 @@ from logics import *
 from sqlMethods import *
 
 load_dotenv()
-
 user = None;
 conn = psycopg2.connect(os.getenv("DATABASE_URL"))
 with conn.cursor() as cur:
@@ -26,6 +25,11 @@ with conn.cursor() as cur:
     conn.commit()
     print(res)
     
+        
+    cur.execute("SELECT * FROM shelf")
+    res = cur.fetchall()
+    conn.commit()
+    print(res)
 app = Flask(__name__)
 app.secret_key = os.getenv("APP_SECRET_KEY")
 
@@ -37,12 +41,12 @@ def get_all_Food():
     rows = cur.fetchall()
     foods = []
     for row in rows:
-        foods.append(Food(row[0], row[1], row[2], row[3], row[4]))
+        foods.append(Food(row[0], row[1], row[2], row[3]))
     return jsonify([my_object.__dict__ for my_object in foods])
 
 @app.route('/food/<string:id>', methods=['GET'])
 def get_Food(id):
-    fode = getFoodById(id)
+    fode = getFood(id)
     if fode:
         return jsonify(fode.__dict__)
     return jsonify({'message': 'Food not found'}), 404
@@ -51,21 +55,26 @@ def get_Food(id):
 @app.route('/food', methods=['POST'])
 def create_food():
     data = request.json
+    shelfId = data.get("shelfId")
     name = data.get('name')
     expiration_date = data.get('expiration_date')
-    food = user.addFood(name,expiration_date)
+    food = createFood( shelfId, name,expiration_date)
     return jsonify(food.__dict__)
 
-@app.route('/food/<string:id>', methods=['PUT'])
+@app.route('/food/use/<string:id>', methods=['PUT'])
 def use_food(id):
-    data = request.get_json()
-    user.useFoodById(id)
-    food = getFoodById(id)
-    my_object = Food(food[0], food[1], food[2], food[3])
-    return jsonify(my_object.__dict__), 200
+    useFood(id)
+    food = getFood(id)
+    return jsonify(food.__dict__), 200
+
+@app.route('/food/add/<string:id>', methods=['PUT'])
+def add_food(id):
+    addFood(id)
+    food = getFood(id)
+    return jsonify(food.__dict__), 200
 
 #TODO uncertain if this on is necessary could be helpful to change the expiration date
-@app.route('/food/<string:id>', methods=['PUT'])
+@app.route('/food/update/<string:id>', methods=['PUT'])
 def update_food(id):
     data = request.get_json()
     cur = conn.cursor()
@@ -78,10 +87,47 @@ def update_food(id):
 
 @app.route('/food/<string:id>', methods=['DELETE'])
 def delete_food(id):
+    if(getFood(id) != None):
+        removeFood(id)
+        response = jsonify({'message': 'Food removed successfully'})
+        return response, 204
+    else:
+        response = jsonify({"message": "Food does not exist in the database"})
+        return response, 404
+
+@app.route('/food/move', methods=['PUT'])
+def update_food_shelf():
     data = request.json
-    user.removeFoodById(id)
-    response = jsonify({'message': 'Food removed successfully'})
+    shelfId = data.get("shelfId")
+    foodId = data.get("foodId") 
+    if(getFood(foodId) and getShelf(shelfId)):
+        updateFoodShelf(foodId, shelfId)
+        response = jsonify({'message': 'Food moved successfully'})
+        return response, 204
+    else:
+        response = jsonify({"message": "Food or Shelf does not exist in the database"})
+        return response, 404
+
+@app.route('/shelf', methods=['POST'])
+def create_shelf():
+    data = request.json
+    userId = data.get('userId')
+    addShelf(userId)
+    response = jsonify({'message': 'Successfully created a shelf'})
     return response, 204
+
+
+@app.route('/shelf', methods=['DELETE'])
+def delete_shelf():
+    data = request.json
+    shelfId = data.get('shelfId')
+    if(getShelf(shelfId, True) != None):
+        removeShelf(shelfId)
+        response = jsonify({'message': 'Successfully created a shelf'})
+        return response, 204
+    else:
+        response = jsonify({"message":"Shelf was not found"})
+        return response, 404
 
 oauth = OAuth(app)
 # TODO: make the client ID and the secret env variables
@@ -94,7 +140,7 @@ google = oauth.register(
     authorize_url='https://accounts.google.com/o/oauth2/auth',
     authorize_params=None,
     api_base_url='https://www.googleapis.com/oauth2/v1/',
-    userinfo_endpoint='https://openidconnect.googleapis.com/v1/userinfo',
+    userinfo_endpoint='https://openidconnect.googleapis.com/v1/userainfo',
     jwks_uri='https://www.googleapis.com/oauth2/v3/certs',
     client_kwargs={'scope': 'openid email profile'},
 )
@@ -125,7 +171,8 @@ def authorize():
     print(userinfo["id"])
     session['profile'] = userinfo
     email = userinfo["email"]
-    user = addUser(email)
+    if(getUser(email) == None):
+        addUser(email)
     return redirect('/')
 
 @app.route('/logout')
@@ -133,11 +180,6 @@ def logout():
     session.clear()
     return redirect('/')
 
-@app.route('/log')
-def consoleLog():
-    print(user)
-    return redirect("/")
-    
 
 
 if __name__ == '__main__':
