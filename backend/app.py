@@ -51,7 +51,7 @@ def get_Food(id):
         return jsonify(fode.__dict__)
     return jsonify({'message': 'Food not found'}), 404
     
-
+#used when food is being created and supports multiple creation of same food (increments the count)
 @app.route('/food', methods=['POST'])
 def create_food():
     data = request.json
@@ -61,12 +61,14 @@ def create_food():
     food = createFood( shelfId, name,expiration_date)
     return jsonify(food.__dict__)
 
+#used when food is being eaten
 @app.route('/food/use/<string:id>', methods=['PUT'])
 def use_food(id):
     useFood(id)
     food = getFood(id)
     return jsonify(food.__dict__), 200
 
+#used after food is created, just need id
 @app.route('/food/add/<string:id>', methods=['PUT'])
 def add_food(id):
     addFood(id)
@@ -85,6 +87,7 @@ def update_food(id):
     my_object = Food(row[0], row[1], row[2], row[3])
     return jsonify(my_object.__dict__), 200
 
+#used when food is not wanted
 @app.route('/food/<string:id>', methods=['DELETE'])
 def delete_food(id):
     if(getFood(id) != None):
@@ -95,6 +98,8 @@ def delete_food(id):
         response = jsonify({"message": "Food does not exist in the database"})
         return response, 404
 
+
+#used when moving a food to another shelf
 @app.route('/food/move', methods=['PUT'])
 def update_food_shelf():
     data = request.json
@@ -108,6 +113,7 @@ def update_food_shelf():
         response = jsonify({"message": "Food or Shelf does not exist in the database"})
         return response, 404
 
+#used when there is no shelf
 @app.route('/shelf', methods=['POST'])
 def create_shelf():
     data = request.json
