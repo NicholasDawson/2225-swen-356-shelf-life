@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, url_for
+from flask import Flask, jsonify, make_response, redirect, request, url_for
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity, unset_jwt_cookies
 from flask_cors import CORS
 from authlib.integrations.flask_client import OAuth
@@ -63,18 +63,22 @@ def authorize():
 
         print(userinfo)
 
-        # Check if the user already exists in the database
-        user = getUserByGoogleID(google_id)
+        # ------------ Commenting this section out until DB changes are applied ----------------
+        # # Check if the user already exists in the database
+        # user = getUserByGoogleID(google_id)
 
-        if not user:
-            # If the user doesn't exist, create a new user record in the database
-            user = User(google_id=google_id, name=name)
-            addUser(user)
-            print("new user", user)
+        # if not user:
+        #     # If the user doesn't exist, create a new user record in the database
+        #     user = User(google_id=google_id, name=name)
+        #     addUser(user)
+        #     print("new user", user)
+        # --------------------------------------------------------------------------------------
 
-        # Generate an access token and return it
+        # Generate an access token and redirect to the splash page with the token in the query string
         access_token = create_access_token(identity=email)
-        return jsonify({'access_token': access_token}), 200
+        # TODO: change the hardcoded url
+        redirect_url = f'{os.getenv("FRONTEND_URL")}/splash?access_token={access_token}'
+        return redirect(redirect_url)
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
@@ -91,7 +95,7 @@ def protected():
 def logout():
     response = jsonify({'logout': True})
     unset_jwt_cookies(response)
-    return response
+    return response, 200
 
 # endregion
 
