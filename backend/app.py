@@ -1,16 +1,99 @@
-from flask import Flask, jsonify, request, url_for, redirect, session
+from flask import Flask, jsonify, request, url_for
+from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity, unset_jwt_cookies
 from flask_cors import CORS
 from authlib.integrations.flask_client import OAuth
-import json
 import os
 import psycopg2
 
 
 from dotenv import load_dotenv
 
-from logics.Food import Food 
-from logics import *
+from models.Food import Food 
+from models import *
 from sqlMethods import *
+
+
+app = Flask(__name__)
+
+# Configure JWT
+app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'super-secret')  # replace with your own secret key
+jwt = JWTManager(app)
+
+# Configure Google OAuth
+oauth = OAuth(app)
+oauth.init_app(app)
+google = oauth.register(
+    name='google',
+    client_id=os.getenv("GOOGLE_CLIENT_ID"),
+    client_secret=os.getenv("GOOGLE_CLIENT_SECRET"),
+    access_token_url='https://accounts.google.com/o/oauth2/token',
+    access_token_params=None,
+    authorize_url='https://accounts.google.com/o/oauth2/auth',
+    authorize_params=None,
+    api_base_url='https://www.googleapis.com/oauth2/v1/',
+    userinfo_endpoint='https://www.googleapis.com/oauth2/v3/userinfo',
+    jwks_uri='https://www.googleapis.com/oauth2/v3/certs',
+    client_kwargs={'scope': 'openid email profile'},
+)
+
+# region Authentication Methods
+   
+# Define an endpoint for logging in with Google OAuth2
+@app.route('/login')
+def login():
+    redirect_uri = url_for('authorize', _external=True)
+    return google.authorize_redirect(
+        redirect_uri=redirect_uri, 
+        access_type='offline', 
+        prompt='consent'
+    )
+
+
+# Define the callback for handling the OAuth2 response
+@app.route('/authorize')
+def authorize():
+    try:
+        token = google.authorize_access_token()
+        resp = google.get('userinfo')
+        resp.raise_for_status()
+        userinfo = resp.json()
+        email = userinfo["email"]
+        name = userinfo["name"]
+        google_id = userinfo["id"]
+
+        print(userinfo)
+
+        # Check if the user already exists in the database
+        user = getUserByGoogleID(google_id)
+
+        if not user:
+            # If the user doesn't exist, create a new user record in the database
+            user = User(google_id=google_id, name=name)
+            addUser(user)
+            print("new user", user)
+
+        # Generate an access token and return it
+        access_token = create_access_token(identity=email)
+        return jsonify({'access_token': access_token}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
+
+
+# Define a protected endpoint that requires authentication (For testing purposes)
+@app.route('/protected')
+@jwt_required()
+def protected():
+    current_user = get_jwt_identity()
+    return jsonify(logged_in_as=current_user), 200
+
+@app.route('/logout')
+@jwt_required()
+def logout():
+    response = jsonify({'logout': True})
+    unset_jwt_cookies(response)
+    return response
+
+# endregion
 
 load_dotenv()
 user = None;
@@ -31,12 +114,11 @@ with conn.cursor() as cur:
     res = cur.fetchall()
     conn.commit()
     print(res)
-app = Flask(__name__)
+
 app.secret_key = os.getenv("APP_SECRET_KEY")
 print([os.getenv("FRONTEND_URL")])
 CORS(app, origins=[os.getenv("FRONTEND_URL")])
 
-# oauth config
 @app.route('/Food', methods=['GET'])
 def get_all_Food():
     cur = conn.cursor()
@@ -137,57 +219,6 @@ def delete_shelf():
     else:
         response = jsonify({"message":"Shelf was not found"})
         return response, 404
-
-oauth = OAuth(app)
-# TODO: make the client ID and the secret env variables
-google = oauth.register(
-    name='google',
-    client_id=os.getenv("GOOGLE_CLIENT_ID"),
-    client_secret=os.getenv("GOOGLE_CLIENT_SECRET"),
-    access_token_url='https://accounts.google.com/o/oauth2/token',
-    access_token_params=None,
-    authorize_url='https://accounts.google.com/o/oauth2/auth',
-    authorize_params=None,
-    api_base_url='https://www.googleapis.com/oauth2/v1/',
-    userinfo_endpoint='https://openidconnect.googleapis.com/v1/userainfo',
-    jwks_uri='https://www.googleapis.com/oauth2/v3/certs',
-    client_kwargs={'scope': 'openid email profile'},
-)
-
-@app.route('/')
-def home():
-    if 'profile' in session:
-        name = dict(session)['profile']['given_name']
-        return f'hello, {name}'
-    else:
-        return 'please, login'
-    
-@app.route('/login')
-def login():
-    redirect_uri = url_for('authorize', _external=True)
-    return google.authorize_redirect(redirect_uri)
-
-@app.route('/authorize')
-def authorize():
-    token = google.authorize_access_token()
-    # Get information about the authenticated user
-    resp = google.get('userinfo')
-    # raise an exception if the response from the server is not successful 
-    resp.raise_for_status()
-    userinfo = resp.json()
-    # do something with the token and profile
-    print(json.dumps(userinfo, indent=4))
-    print(userinfo["id"])
-    session['profile'] = userinfo
-    email = userinfo["email"]
-    if(getUser(email) == None):
-        addUser(email)
-    return redirect('/')
-
-@app.route('/logout')
-def logout():
-    session.clear()
-    return redirect('/')
 
 
 

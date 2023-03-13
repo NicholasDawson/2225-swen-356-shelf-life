@@ -3,9 +3,9 @@ import os
 import psycopg2
 
 from dotenv import load_dotenv
-from logics.Food import Food
-from logics.Shelf import Shelf
-from logics.User import User
+from models.Food import Food
+from models.Shelf import Shelf
+from models.User import User
 load_dotenv()
 db = psycopg2.connect(os.getenv("DATABASE_URL"))
 
@@ -181,13 +181,13 @@ def removeShelf(shelfId):
 
 #users functionality
 #--------------------------------------
-def addUser(usn):
+def addUser(usr: User):
     sqlStatement = """
-        INSERT INTO users(username)
-        VALUES('%s');
-    """%(usn)
-    cursor.execute(sqlStatement);
-    db.commit();
+        INSERT INTO users(username, email, googleId)
+        VALUES('%s', '%s', '%s');
+    """%(usr.name, usr.email, usr.googleId)
+    cursor.execute(sqlStatement)
+    db.commit()
     
     
 def getUser(usn) -> User:
@@ -202,4 +202,15 @@ def getUser(usn) -> User:
     else:
         return None
 
-
+def getUserByGoogleID(googleId) -> User:
+    cursor.execute("""SELECT  userId, username, email
+                             FROM users
+                             WHERE googleId = '%s'
+                             """%(googleId))
+    result = cursor.fetchone()
+    db.commit()
+    if result is not None:
+        userId, username, email = result
+        return User(userId, username, email, googleId)
+    else:
+        return None
