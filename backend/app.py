@@ -69,7 +69,7 @@ def authorize():
 
         if not user:
             # If the user doesn't exist, create a new user record in the database
-            user = User(google_id=google_id, name=name)
+            user = User(google_id=google_id, name=name, email=email)
             addUser(user)
             print("new user", user)
         # --------------------------------------------------------------------------------------

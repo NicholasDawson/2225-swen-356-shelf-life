@@ -183,9 +183,9 @@ def removeShelf(shelfId):
 #--------------------------------------
 def addUser(usr: User):
     sqlStatement = """
-        INSERT INTO users(username, email, googleId)
+        INSERT INTO users(username, email, google_id)
         VALUES('%s', '%s', '%s');
-    """%(usr.name, usr.email, usr.googleId)
+    """%(usr.name, usr.email, usr.google_id)
     cursor.execute(sqlStatement)
     db.commit()
     
@@ -202,15 +202,15 @@ def getUser(usn) -> User:
     else:
         return None
 
-def getUserByGoogleID(googleId) -> User:
+def getUserByGoogleID(google_id) -> User:
     cursor.execute("""SELECT  userId, username, email
                              FROM users
-                             WHERE googleId = '%s'
-                             """%(googleId))
+                             WHERE google_id = '%s'
+                             """%(google_id))
     result = cursor.fetchone()
     db.commit()
     if result is not None:
         userId, username, email = result
-        return User(userId, username, email, googleId)
+        return User(userId, username, email, google_id)
     else:
         return None

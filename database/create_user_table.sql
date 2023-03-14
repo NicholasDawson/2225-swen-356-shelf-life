@@ -5,5 +5,5 @@ CREATE TABLE users (
   userId UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   username TEXT UNIQUE NOT NULL,
   email TEXT UNIQUE NOT NULL,
-  googleId TEXT UNIQUE NOT NULL
+  google_id TEXT UNIQUE NOT NULL
 );
