@@ -65,13 +65,13 @@ def authorize():
 
         # ------------ Commenting this section out until DB changes are applied ----------------
         # # Check if the user already exists in the database
-        # user = getUserByGoogleID(google_id)
+        user = getUserByGoogleID(google_id)
 
-        # if not user:
-        #     # If the user doesn't exist, create a new user record in the database
-        #     user = User(google_id=google_id, name=name)
-        #     addUser(user)
-        #     print("new user", user)
+        if not user:
+            # If the user doesn't exist, create a new user record in the database
+            user = User(google_id=google_id, name=name)
+            addUser(user)
+            print("new user", user)
         # --------------------------------------------------------------------------------------
 
         # Generate an access token and redirect to the splash page with the token in the query string
