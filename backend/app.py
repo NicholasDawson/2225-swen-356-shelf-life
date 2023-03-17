@@ -128,10 +128,11 @@ def get_all_Food():
     cur = conn.cursor()
     cur.execute("SELECT * FROM Food")
     rows = cur.fetchall()
+    print(*rows)
     foods = []
     for row in rows:
-        foods.append(Food(row[0], row[1], row[2], row[3]))
-    return jsonify([my_object.__dict__ for my_object in foods])
+        foods.append(Food( id=row[0], shelfId=row[1], name=row[2], expiration=row[3],dateAdded=row[4], quantity=row[5]))
+    return jsonify([my_object.__dict__ for my_object in foods]), 200
 
 @app.route('/food/<string:id>', methods=['GET'])
 def get_Food(id):
