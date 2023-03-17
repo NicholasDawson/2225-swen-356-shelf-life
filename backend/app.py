@@ -137,7 +137,7 @@ def get_all_Food():
 def get_Food(id):
     fode = getFood(id)
     if fode:
-        return jsonify(fode.__dict__)
+        return jsonify(fode.__dict__), 200
     return jsonify({'message': 'Food not found'}), 404
     
 #used when food is being created and supports multiple creation of same food (increments the count)
@@ -182,7 +182,7 @@ def delete_food(id):
         return response, 404
 
 
-#used when moving a food to another shelf
+#used when moving a food to another shelf maybe elimate this because a user has one shelf
 @app.route('/food/move', methods=['PUT'])
 def update_food_shelf():
     data = request.json
@@ -196,7 +196,7 @@ def update_food_shelf():
         response = jsonify({"message": "Food or Shelf does not exist in the database"})
         return response, 404
 
-#used when there is no shelf
+#used to create a shelf with a given name
 @app.route('/shelf', methods=['POST'])
 def create_shelf():
     data = request.json
@@ -212,11 +212,23 @@ def delete_shelf():
     shelfId = data.get('shelfId')
     if(getShelf(shelfId, True) != None):
         removeShelf(shelfId)
-        response = jsonify({'message': 'Successfully created a shelf'})
+        response = jsonify({'message': 'Successfully deleted a shelf'})
         return response, 204
     else:
         response = jsonify({"message":"Shelf was not found"})
         return response, 404
+
+#gets a shelf by a user Id #TODO this assumes that a user only has one shelf. For the demo this will be true but if this 
+#was real application it would be more
+@app.route('/shelf/<string:userId>', methods= ['GET'])
+def get_shelf(userId):
+    shelf = getShelfByUserId(userUID=userId)
+    if(shelf):
+        return jsonify(shelf.__dict__), 200
+    return jsonify({"message": "User does not have a shelf "}), 400
+
+
+
 
 
 

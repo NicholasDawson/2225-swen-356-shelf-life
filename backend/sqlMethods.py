@@ -154,8 +154,19 @@ def addShelf(userUID):
     cursor.execute(sqlStatement)
     db.commit();
     
+#gets all the shelves a user has
+def getShelves(userUID):
+    sqlStatement = """
+        SELECT shelfID
+        FROM shelf
+        WHERE userID = '%s'
+    """%(userUID)
+    cursor.execute(sqlStatement)
+    shelveIds = cursor.fetchall()
+    db.commit()
+    return shelveIds
 
-def getShelf(userUID) -> Shelf:
+def getShelfByUserId(userUID) -> Shelf:
     sqlStatement = """
         SELECT shelfID
         FROM shelf
@@ -164,7 +175,7 @@ def getShelf(userUID) -> Shelf:
     cursor.execute(sqlStatement)
     shelfID = cursor.fetchone()
     db.commit();
-    return Shelf(shelfID[0]);
+    return Shelf(shelfID[0], userUID);
 
 def getShelf(userUID, boolean) -> Shelf:
     sqlStatement = """
