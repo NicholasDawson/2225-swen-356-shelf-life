@@ -202,10 +202,14 @@ def create_shelf():
     data = request.json
     userId = data.get('userId')
     shelfName = data.get('shelfName')
-    addShelf(userId,shelfName)
+    if(shelfName):
+        addShelf(userId,shelfName)
+    else:
+        addShelf(userId,1)
     response = jsonify({'message': 'Successfully created a shelf'})
     return response, 201
 
+#user can update the name of shelf using this method
 @app.route('/shelf', methods=['PUT'])
 def update_shelf():
     data = request.json
@@ -238,9 +242,6 @@ def get_shelf(userId):
     return jsonify({"message": "User does not have a shelf "}), 400
 
 
-
-
-
-
 if __name__ == '__main__':
+    # updateShelfName("7ca9dbbc-6a7e-4316-a0d0-69c98b0c3ee2",'milf')
     app.run(debug=True)
