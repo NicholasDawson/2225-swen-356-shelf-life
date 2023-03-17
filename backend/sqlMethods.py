@@ -33,18 +33,18 @@ def setup():
 def createFood(shelfId, name, expiration, quantity = 1) -> Food:
 
     cursor.execute("""SELECT * FROM food
-                      WHERE name = '%s' 
+                      WHERE foodName = '%s' 
                       AND expiration = '%s'"""%(name, expiration))
     found = cursor.fetchone();
     if found == None:
-        sqlStatement = """INSERT INTO food(shelfId, name, expiration, dateAdded)
+        sqlStatement = """INSERT INTO food(shelfId, foodName, expiration, dateAdded)
                         VALUES('%s','%s', '%s', CURRENT_DATE)""" %(shelfId, name, expiration);
         cursor.execute(sqlStatement);
         
     else:
         cursor.execute("""UPDATE food
                           SET quantity = quantity + 1
-                          WHERE name = '%s'
+                          WHERE foodName = '%s'
                           AND expiration = '%s'
                           """ %(name,expiration))
     result = getFoodByName(name, expiration)
@@ -77,7 +77,7 @@ def getFoodByName(foodName,expiration) -> Food:
     format = '%Y-%m-%d'
     sqlStatement = """SELECT foodId, shelfId, quantity
                       FROM food
-                      WHERE name = '%s'
+                      WHERE foodName = '%s'
                       AND expiration = '%s'""" %(foodName,datetime.strptime(expiration, format));
     cursor.execute(sqlStatement);
     food = cursor.fetchone();

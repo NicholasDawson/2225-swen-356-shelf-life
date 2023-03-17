@@ -148,7 +148,7 @@ def create_food():
     name = data.get('name')
     expiration_date = data.get('expiration_date')
     food = createFood( shelfId, name,expiration_date)
-    return jsonify(food.__dict__)
+    return jsonify(food.__dict__), 201
 
 #used when food is being eaten
 @app.route('/food/use/<string:id>', methods=['PUT'])
@@ -197,7 +197,7 @@ def update_food_shelf():
     if(getFood(foodId) and getShelf(shelfId)):
         updateFoodShelf(foodId, shelfId)
         response = jsonify({'message': 'Food moved successfully'})
-        return response, 204
+        return response, 201
     else:
         response = jsonify({"message": "Food or Shelf does not exist in the database"})
         return response, 404
@@ -209,7 +209,7 @@ def create_shelf():
     userId = data.get('userId')
     addShelf(userId)
     response = jsonify({'message': 'Successfully created a shelf'})
-    return response, 204
+    return response, 201
 
 
 @app.route('/shelf', methods=['DELETE'])
