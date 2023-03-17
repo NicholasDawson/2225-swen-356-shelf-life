@@ -128,7 +128,6 @@ def get_all_Food():
     cur = conn.cursor()
     cur.execute("SELECT * FROM Food")
     rows = cur.fetchall()
-    print(*rows)
     foods = []
     for row in rows:
         foods.append(Food( id=row[0], shelfId=row[1], name=row[2], expiration=row[3],dateAdded=row[4], quantity=row[5]))
@@ -151,31 +150,25 @@ def create_food():
     food = createFood( shelfId, name,expiration_date)
     return jsonify(food.__dict__), 201
 
-#used when food is being eaten
-@app.route('/food/use/<string:id>', methods=['PUT'])
-def use_food(id):
-    useFood(id)
-    food = getFood(id)
-    return jsonify(food.__dict__), 200
-
-#used after food is created, just need id
-@app.route('/food/add/<string:id>', methods=['PUT'])
-def add_food(id):
-    addFood(id)
-    food = getFood(id)
-    return jsonify(food.__dict__), 200
+#used when food is being updated or used or changed
+@app.route('/food/updateQuantity/<string:id>', methods=['PUT'])
+def update_food_quantity(id):
+    data = request.json
+    quantity = data.get("quantity")
+    if( quantity ):
+        updateFoodQuantity(id,quantity)
+        food = getFood(id)
+        return jsonify(food.__dict__), 200
+    else:
+        return jsonify({"message": "can not change a quantity to not a number"})
 
 #TODO uncertain if this on is necessary could be helpful to change the expiration date
 @app.route('/food/update/<string:id>', methods=['PUT'])
 def update_food(id):
     data = request.get_json()
-    cur = conn.cursor()
-    cur.execute("UPDATE Food SET name = %s, expiration = %s, quantity = %s WHERE id = %s", (data['name'], data['expiration'], data['quantity'], id))
-    conn.commit()
-    cur.execute("SELECT * FROM my_objects WHERE id = %s", (id,))
-    row = cur.fetchone()
-    my_object = Food(row[0], row[1], row[2], row[3])
-    return jsonify(my_object.__dict__), 200
+    food = Food(**data)
+    updated_food = updateFood(food)
+    return jsonify(updated_food.__dict__), 200
 
 #used when food is not wanted
 @app.route('/food/<string:id>', methods=['DELETE'])

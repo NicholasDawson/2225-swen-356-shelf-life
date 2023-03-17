@@ -18,9 +18,10 @@ class Food:
     @property
     def expiration(self):
         return self.__expiration;
+        
     @property
     def dateAdded(self):
-        return self.dateAdded
+        return self.__dateAdded;
     @property
     def quantity(self):
         return self.__quantity;

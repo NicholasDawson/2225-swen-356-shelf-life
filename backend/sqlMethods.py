@@ -52,11 +52,11 @@ def createFood(shelfId, name, expiration, quantity = 1) -> Food:
     return result; 
 
 
-def addFood(foodId):
+def updateFoodQuantity(foodId, quantity):
     cursor.execute("""UPDATE food
-                          SET quantity = quantity + 1
+                          SET quantity = '%d'
                           WHERE foodId = '%s'
-                          """ %(foodId))
+                          """ %(quantity,foodId))
     db.commit()
 
 
@@ -99,6 +99,19 @@ def getFood(id) -> Food:
         return food
     foodid, shelfid, foodname, expiration, dateadded, quantity = food
     return Food(foodid, shelfid, foodname, expiration, dateadded, quantity)
+
+
+#full update on the food item
+def updateFood(food:Food):
+    sqlStatement = """ Update Food
+                        Set foodName = '%s',
+                        expiration = '%s',
+                        quantity = '%s',
+                        dateadded = '%s'
+                        WHERE foodId = '%s'
+                   """%(food.name, food.expiration, food.quantity, food.dateAdded, food.id)
+    cursor.execute(sqlStatement);
+    return getFood(food.id)
 
 
 def useFood(foodId):
