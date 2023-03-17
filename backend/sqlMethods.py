@@ -146,11 +146,17 @@ def updateFoodShelf(foodId, newShelfId):
     db.commit()    
 #shelves functionality
 #-------------------------------------
-def addShelf(userUID):
-    sqlStatement = """
-        INSERT INTO shelf(userId)
-        VALUES( '%s')
-    """ %(userUID);
+def addShelf(userUID, shelfName = 1):
+    if(shelfName):
+        sqlStatement = """
+            INSERT INTO shelf(userId)
+            VALUES( '%s')
+        """ %(userUID);
+    else:
+        sqlStatement = """
+            INSERT INTO shelf(userId, shelfName)
+            VALUES('%s','%s')
+        """
     cursor.execute(sqlStatement)
     db.commit();
     
@@ -168,14 +174,14 @@ def getShelves(userUID):
 
 def getShelfByUserId(userUID) -> Shelf:
     sqlStatement = """
-        SELECT shelfID
+        SELECT *
         FROM shelf
         WHERE userID = '%s'
     """%(userUID)
     cursor.execute(sqlStatement)
-    shelfID = cursor.fetchone()
+    shelf = cursor.fetchone()
     db.commit();
-    return Shelf(shelfID[0], userUID);
+    return Shelf(shelf[0], shelf[1], shelf[2]);
 
 def getShelf(userUID, boolean) -> Shelf:
     sqlStatement = """
@@ -188,7 +194,7 @@ def getShelf(userUID, boolean) -> Shelf:
     db.commit();
     if(shelf is None):
         return shelf;
-    return Shelf(shelf[0],shelf[1]);
+    return Shelf(shelf[0],shelf[1],shelf[2]);
 
 def removeShelf(shelfId):
     sqlStatement = """
@@ -201,7 +207,15 @@ def removeShelf(shelfId):
         WHERE shelfId = '%s'
     """%(shelfId)
     cursor.execute(sqlStatement)
-    
+    db.commit();
+
+def updateShelfName(shelfId, shelfName):
+    sqlStatement = """
+        UPDATE shelf
+        SET shelfName = '%s'
+        WHERE shelfId = '%s'
+    """%(shelfName,shelfId)
+    cursor.execute(sqlStatement)
     db.commit();
 
 #users functionality

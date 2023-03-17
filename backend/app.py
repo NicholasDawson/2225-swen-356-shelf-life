@@ -201,8 +201,18 @@ def update_food_shelf():
 def create_shelf():
     data = request.json
     userId = data.get('userId')
-    addShelf(userId)
+    shelfName = data.get('shelfName')
+    addShelf(userId,shelfName)
     response = jsonify({'message': 'Successfully created a shelf'})
+    return response, 201
+
+@app.route('/shelf', methods=['PUT'])
+def update_shelf():
+    data = request.json
+    shelfId = data.get('shelfId')
+    newShelfName = data.get('shelfName')
+    updateShelfName(shelfId, newShelfName)
+    response = jsonify({'message': 'Successfully updated the shelf'})
     return response, 201
 
 
