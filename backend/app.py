@@ -202,7 +202,7 @@ def create_shelf():
     data = request.json
     userId = data.get('userId')
     shelfName = data.get('shelfName')
-    if(shelfName):
+    if(shelfName != None):
         addShelf(userId,shelfName)
     else:
         addShelf(userId,1)
@@ -243,5 +243,4 @@ def get_shelf(userId):
 
 
 if __name__ == '__main__':
-    # updateShelfName("7ca9dbbc-6a7e-4316-a0d0-69c98b0c3ee2",'milf')
     app.run(debug=True)
