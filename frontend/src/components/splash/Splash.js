@@ -119,11 +119,9 @@ class Splash extends Component {
                       <img src={food} alt="" height="36em" width="36em"></img>
                     </div>
                     <div>
-                      <h3 className="fs-2">Featured title</h3>
+                      <h3 className="fs-2">Shelf Life Tracking</h3>
                       <p>
-                        Paragraph of text beneath the heading to explain the
-                        heading. We'll add onto it with another sentence and
-                        probably just keep going until we run out of words.
+                        Guarentee that all ingredients in your pantry are safe and edible
                       </p>
                     </div>
                   </div>
@@ -137,11 +135,9 @@ class Splash extends Component {
                       ></img>
                     </div>
                     <div>
-                      <h3 className="fs-2">Featured title</h3>
+                      <h3 className="fs-2">Recipe Tracking</h3>
                       <p>
-                        Paragraph of text beneath the heading to explain the
-                        heading. We'll add onto it with another sentence and
-                        probably just keep going until we run out of words.
+                        See what ingredients you have in stock for any recipe book
                       </p>
                     </div>
                   </div>
@@ -150,11 +146,9 @@ class Splash extends Component {
                       <img src={empty} alt="" height="36em" width="36em"></img>
                     </div>
                     <div>
-                      <h3 className="fs-2">Featured title</h3>
+                      <h3 className="fs-2">Inventory Mangement</h3>
                       <p>
-                        Paragraph of text beneath the heading to explain the
-                        heading. We'll add onto it with another sentence and
-                        probably just keep going until we run out of words.
+                        Get insights on your food Inventory without having to rummage through your pantry 
                       </p>
                     </div>
                   </div>
@@ -163,11 +157,9 @@ class Splash extends Component {
                       <img src={empty} alt="" height="36em" width="36em"></img>
                     </div>
                     <div>
-                      <h3 className="fs-2">Featured title</h3>
+                      <h3 className="fs-2">Restocking</h3>
                       <p>
-                        Paragraph of text beneath the heading to explain the
-                        heading. We'll add onto it with another sentence and
-                        probably just keep going until we run out of words.
+                        Easily create lists and order ingredients that you're running low on
                       </p>
                     </div>
                   </div>
