@@ -54,7 +54,7 @@ export default class Navbar extends Component {
                   />
                 </a>
                 <ul className="dropdown-menu text-small">
-                  <li>Signed in as {this.state.user.name}</li>
+                  <li>{this.state.user.name}</li>
                   <li>
                     <hr className="dropdown-divider" />
                   </li>
