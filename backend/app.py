@@ -75,9 +75,9 @@ def authorize():
         # --------------------------------------------------------------------------------------
 
         # Generate an access token and redirect to the splash page with the token in the query string
-        access_token = create_access_token(identity=email)
+        access_token = create_access_token(identity=userinfo)
         # TODO: change the hardcoded url
-        redirect_url = f'{os.getenv("FRONTEND_URL")}/splash?access_token={access_token}'
+        redirect_url = f'{os.getenv("FRONTEND_URL")}?access_token={access_token}'
         return redirect(redirect_url)
     except Exception as e:
         return jsonify({'error': str(e)}), 400
