@@ -5,17 +5,29 @@ import food from "./food.svg";
 import receipt from "./receipt.svg";
 import empty from "./shelf_empty.svg";
 import pantryImg from "./food-pantry-shelves.jpg";
+import { Navigate } from "react-router-dom";
 
 class Splash extends Component {
-  componentWillMount() {
-    if (this.props.isAuthenticated()) {
-      window.location.href = "/2225-swen-356-shelf-life/#/shelves";
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      //insert here
+      redirect: false,
+    };
+  }
+
+  componentDidMount() {
+    this.setState({ redirect: localStorage.getItem("access_token") !== null });
+  }
+
+  componentDidUpdate() {
+    this.setState({ redirect: localStorage.getItem("access_token") !== null });
   }
 
   render() {
     return (
       <main>
+        {this.state.redirect && <Navigate to="/shelves" replace={true} />}
         <div className="container w-100">
           <div className="row vh-100">
             <div className="col-4 bg-blue d-flex flex-column justify-content-center text-center px-5">

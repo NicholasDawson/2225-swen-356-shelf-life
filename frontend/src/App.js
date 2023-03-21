@@ -27,19 +27,20 @@ class App extends Component {
         console.log(response.data);
         // do something with the response
         // delete the token
-        localStorage.removeItem("accessToken"); // remove token from local storage
+        localStorage.removeItem("access_token"); // remove token from local storage
+        window.location.href = "/2225-swen-356-shelf-life";
       })
       .catch((error) => {
-        localStorage.removeItem("accessToken"); // remove token from local storage
+        localStorage.removeItem("access_token"); // remove token from local storage
+        window.location.href = "/2225-swen-356-shelf-life";
         // handle the error
       });
-
-    window.location.href = "/2225-swen-356-shelf-life";
   }
 
   componentDidMount() {
     const searchParams = new URLSearchParams(window.location.search);
     const accessToken = searchParams.get("access_token");
+ 
 
     if (accessToken) {
       // Store the access token in local storage

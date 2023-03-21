@@ -8,6 +8,7 @@ from models.Shelf import Shelf
 from models.User import User
 load_dotenv()
 db = psycopg2.connect(os.getenv("DATABASE_URL"))
+db.autocommit = True
 
 cursor = db.cursor();
 
@@ -16,7 +17,6 @@ def execute_sql(filename):
     with open(filename) as f:
         executable += f.read()
     cursor.execute(executable);
-    db.commit();
     
 def printTables():
   cursor.execute("""SELECT table_name FROM information_schema.tables
@@ -48,7 +48,6 @@ def createFood(shelfId, name, expiration, quantity = 1) -> Food:
                           AND expiration = '%s'
                           """ %(name,expiration))
     result = getFoodByName(name, expiration)
-    db.commit();
     return result; 
 
 
@@ -57,7 +56,6 @@ def updateFoodQuantity(foodId, quantity):
                           SET quantity = '%d'
                           WHERE foodId = '%s'
                           """ %(quantity,foodId))
-    db.commit()
 
 
 
@@ -68,7 +66,6 @@ def getFood(foodId) -> Food:
     cursor.execute(sqlStatement)
     food = cursor.fetchone()
     if(food):
-        db.commit()
         return Food(id=foodId,name=food[0],expiration=food[1],quantity=food[2])
     return None
 
@@ -80,7 +77,6 @@ def getFoodByName(foodName) -> Food:
                       """ %(foodName);
     cursor.execute(sqlStatement);
     food = cursor.fetchone();
-    db.commit();
     if food is None:
         return food
     foodid, shelfid, foodname, expiration, dateadded, quantity = food
@@ -94,7 +90,6 @@ def getFood(id) -> Food:
                       """ %(id);
     cursor.execute(sqlStatement);
     food  = cursor.fetchone();
-    db.commit();
     if food is None:
         return food
     foodid, shelfid, foodname, expiration, dateadded, quantity = food
@@ -119,7 +114,6 @@ def useFood(foodId):
                     SET quantity = quantity - 1 
                     WHERE foodId = '%s' AND quantity > 0"""%(foodId)
     cursor.execute(sqlStatement);
-    db.commit();
 
 #Can be used with or without a shelf or user ID
 def removeFood(foodId, userId):
@@ -127,14 +121,12 @@ def removeFood(foodId, userId):
                     WHERE foodId = '%s'
                    """%(foodId)
     cursor.execute(sqlStatement);
-    db.commit();
     
 def removeFood(foodId):
     sqlStatement = """DELETE from food
                     WHERE foodId = '%s'
                    """%(foodId)
     cursor.execute(sqlStatement);
-    db.commit();
 
 def updateFoodShelf(foodId, newShelfId):
     sqlStatement = """
@@ -142,8 +134,7 @@ def updateFoodShelf(foodId, newShelfId):
         SET shelfId = '%s'
         WHERE foodID = '%s'
     """%(newShelfId,foodId)
-    cursor.execute(sqlStatement)
-    db.commit()    
+    cursor.execute(sqlStatement) 
 #shelves functionality
 #-------------------------------------
 def addShelf(userUID, shelfName = 1):
@@ -158,7 +149,6 @@ def addShelf(userUID, shelfName = 1):
             VALUES('%s','%s')
         """
     cursor.execute(sqlStatement)
-    db.commit();
     
 #gets all the shelves a user has
 def getShelves(userUID):
@@ -169,7 +159,6 @@ def getShelves(userUID):
     """%(userUID)
     cursor.execute(sqlStatement)
     shelveIds = cursor.fetchall()
-    db.commit()
     return shelveIds
 
 def getShelfByUserId(userUID) -> Shelf:
@@ -180,7 +169,6 @@ def getShelfByUserId(userUID) -> Shelf:
     """%(userUID)
     cursor.execute(sqlStatement)
     shelf = cursor.fetchone()
-    db.commit();
     return Shelf(shelf[0], shelf[1], shelf[2]);
 
 def getShelf(userUID, boolean) -> Shelf:
@@ -191,7 +179,6 @@ def getShelf(userUID, boolean) -> Shelf:
     """%(userUID)
     cursor.execute(sqlStatement)
     shelf = cursor.fetchone()
-    db.commit();
     if(shelf is None):
         return shelf;
     return Shelf(shelf[0],shelf[1],shelf[2]);
@@ -207,7 +194,6 @@ def removeShelf(shelfId):
         WHERE shelfId = '%s'
     """%(shelfId)
     cursor.execute(sqlStatement)
-    db.commit();
 
 def updateShelfName(shelfId, shelfName):
     sqlStatement = """
@@ -216,7 +202,6 @@ def updateShelfName(shelfId, shelfName):
         WHERE shelfId = '%s'
     """%(shelfName,shelfId)
     cursor.execute(sqlStatement)
-    db.commit();
 
 #users functionality
 #--------------------------------------
@@ -226,7 +211,6 @@ def addUser(usr: User):
         VALUES('%s', '%s', '%s');
     """%(usr.name, usr.email, usr.google_id)
     cursor.execute(sqlStatement)
-    db.commit()
     
     
 def getUser(usn) -> User:
@@ -235,7 +219,6 @@ def getUser(usn) -> User:
                              WHERE username = '%s'
                              """%(usn));
     id = cursor.fetchone();
-    db.commit();
     if(id != None):
         return User(id[0],usn)
     else:
@@ -247,7 +230,6 @@ def getUserByGoogleID(google_id) -> User:
                              WHERE google_id = '%s'
                              """%(google_id))
     result = cursor.fetchone()
-    db.commit()
     if result is not None:
         userId, username, email = result
         return User(userId, username, email, google_id)
