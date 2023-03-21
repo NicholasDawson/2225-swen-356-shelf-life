@@ -34,7 +34,7 @@ class App extends Component {
         // handle the error
       });
 
-    window.location.href = "/";
+    window.location.href = "/2225-swen-356-shelf-life";
   }
 
   componentDidMount() {

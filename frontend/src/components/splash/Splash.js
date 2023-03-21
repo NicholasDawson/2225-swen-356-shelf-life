@@ -9,7 +9,7 @@ import pantryImg from "./food-pantry-shelves.jpg";
 class Splash extends Component {
   componentWillMount() {
     if (this.props.isAuthenticated()) {
-      window.location.href = "/#/shelves";
+      window.location.href = "/2225-swen-356-shelf-life/#/shelves";
     }
   }
 
