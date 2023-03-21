@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/2225-swen-356-shelf-life/static/css/main.076da8f1.css",
-    "main.js": "/2225-swen-356-shelf-life/static/js/main.5be31476.js",
+    "main.js": "/2225-swen-356-shelf-life/static/js/main.98d194ea.js",
     "static/media/food-pantry-shelves.jpg": "/2225-swen-356-shelf-life/static/media/food-pantry-shelves.685b5af0e846082c45cb.jpg",
     "static/media/food.svg": "/2225-swen-356-shelf-life/static/media/food.550365c9ed2e560c299d58e069819646.svg",
     "static/media/receipt.svg": "/2225-swen-356-shelf-life/static/media/receipt.3e49f2cda125d44226be05e034794b8b.svg",
     "static/media/shelf_empty.svg": "/2225-swen-356-shelf-life/static/media/shelf_empty.81ff806667df191aee7f1b4bde339915.svg",
     "index.html": "/2225-swen-356-shelf-life/index.html",
     "main.076da8f1.css.map": "/2225-swen-356-shelf-life/static/css/main.076da8f1.css.map",
-    "main.5be31476.js.map": "/2225-swen-356-shelf-life/static/js/main.5be31476.js.map"
+    "main.98d194ea.js.map": "/2225-swen-356-shelf-life/static/js/main.98d194ea.js.map"
   },
   "entrypoints": [
     "static/css/main.076da8f1.css",
-    "static/js/main.5be31476.js"
+    "static/js/main.98d194ea.js"
   ]
 }
