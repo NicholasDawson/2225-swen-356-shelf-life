@@ -8,7 +8,7 @@ import axios from "axios";
 
 class App extends Component {
   sendRequest(path) {
-    return axios.get("http://localhost:5000/" + path, {
+    return axios.get(process.env.REACT_APP_BACKEND_URL + path, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
       },
@@ -18,7 +18,7 @@ class App extends Component {
   logout() {
     console.log("logout");
     axios
-      .get("http://localhost:5000/logout", {
+      .get(process.env.REACT_APP_BACKEND_URL + "logout", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
@@ -51,7 +51,7 @@ class App extends Component {
 
   login() {
     // redirect to authorize endpoint
-    window.location.href = "http://localhost:5000/login";
+    window.location.href = process.env.REACT_APP_BACKEND_URL + "login";
   }
 
   isAuthenticated() {
