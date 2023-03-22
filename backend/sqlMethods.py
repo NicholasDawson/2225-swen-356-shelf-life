@@ -29,6 +29,20 @@ def setup():
     execute_sql('database/create_shelf_table.sql')
     execute_sql('database/create_food_table.sql');
 
+def newCreateFood(shelfId, foodName, expiration, quantity=1):
+    tempcursor = db.cursor();
+    sqlStatement = """
+        INSERT INTO food (shelfid, foodname, expiration, quantity) VALUES ('%s', '%s', '%s', %s);
+    """%(shelfId, foodName, expiration ,quantity)
+    tempcursor.execute(sqlStatement)
+
+def newDeleteFood(foodId):
+    sqlStatement = """
+        DELETE FROM food
+        WHERE foodId = '%s'
+    """%(foodId)
+    cursor.execute(sqlStatement)
+
 #food functionality
 def createFood(shelfId, name, expiration, quantity = 1) -> Food:
 
@@ -137,8 +151,8 @@ def updateFoodShelf(foodId, newShelfId):
     cursor.execute(sqlStatement) 
 #shelves functionality
 #-------------------------------------
-def addShelf(userUID, shelfName = 1):
-    if(shelfName):
+def addShelf(userUID, shelfName):
+    if not shelfName:
         sqlStatement = """
             INSERT INTO shelf(userId)
             VALUES( '%s')
@@ -147,7 +161,7 @@ def addShelf(userUID, shelfName = 1):
         sqlStatement = """
             INSERT INTO shelf(userId, shelfName)
             VALUES('%s','%s')
-        """
+        """%(userUID, shelfName)
     cursor.execute(sqlStatement)
     
 #gets all the shelves a user has
@@ -162,14 +176,31 @@ def getShelves(userUID):
     return shelveIds
 
 def getShelfByUserId(userUID) -> Shelf:
+    tempcursor = db.cursor();
     sqlStatement = """
         SELECT *
         FROM shelf
         WHERE userID = '%s'
     """%(userUID)
-    cursor.execute(sqlStatement)
-    shelf = cursor.fetchone()
-    return Shelf(shelf[0], shelf[1], shelf[2]);
+    tempcursor.execute(sqlStatement)
+    shelves = []
+    if tempcursor.description:
+        shelves = tempcursor.fetchall()
+    return shelves; 
+
+def getFoodByShelfId(shelfId):
+    tempcursor = db.cursor();
+    sqlStatement = """
+        SELECT *
+        FROM food
+        WHERE shelfId = '%s'
+    """%(shelfId)
+    tempcursor.execute(sqlStatement)
+    foods = []
+    if tempcursor.description:
+        foods = tempcursor.fetchall()
+    return foods; 
+
 
 def getShelf(userUID, boolean) -> Shelf:
     sqlStatement = """
@@ -208,9 +239,10 @@ def updateShelfName(shelfId, shelfName):
 def addUser(usr: User):
     sqlStatement = """
         INSERT INTO users(username, email, google_id)
-        VALUES('%s', '%s', '%s');
-    """%(usr.name, usr.email, usr.google_id)
+        VALUES('%s', '%s', '%s') ON CONFLICT (google_id) DO UPDATE SET google_id='%s' RETURNING userId;
+    """%(usr.name, usr.email, usr.google_id, usr.google_id)
     cursor.execute(sqlStatement)
+    return cursor.fetchone()[0]
     
     
 def getUser(usn) -> User:

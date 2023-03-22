@@ -7,6 +7,13 @@ import { Component } from "react";
 import axios from "axios";
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      authorized: false,
+    };
+  }
+
   sendRequest(path) {
     return axios.get(process.env.REACT_APP_BACKEND_URL + path, {
       headers: {
@@ -40,7 +47,6 @@ class App extends Component {
   componentDidMount() {
     const searchParams = new URLSearchParams(window.location.search);
     const accessToken = searchParams.get("access_token");
- 
 
     if (accessToken) {
       // Store the access token in local storage
@@ -48,6 +54,9 @@ class App extends Component {
       // Remove the access token from the URL
       window.history.replaceState({}, document.title, window.location.pathname);
     }
+    this.setState({
+      authorized: localStorage.getItem("access_token") !== null,
+    });
   }
 
   login() {
@@ -67,10 +76,7 @@ class App extends Component {
           <Route
             path="/"
             element={
-              <Splash
-                login={this.login}
-                isAuthenticated={this.isAuthenticated}
-              />
+              <Splash login={this.login} authorized={this.state.authorized} />
             }
           />
           <Route

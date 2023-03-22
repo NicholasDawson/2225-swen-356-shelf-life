@@ -10,24 +10,13 @@ import { Navigate } from "react-router-dom";
 class Splash extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      //insert here
-      redirect: false,
-    };
-  }
-
-  componentDidMount() {
-    this.setState({ redirect: localStorage.getItem("access_token") !== null });
-  }
-
-  componentDidUpdate() {
-    this.setState({ redirect: localStorage.getItem("access_token") !== null });
+    this.state = {};
   }
 
   render() {
     return (
       <main>
-        {this.state.redirect && <Navigate to="/shelves" replace={true} />}
+        {this.props.authorized && <Navigate to="/shelves" replace={true} />}
         <div className="container w-100">
           <div className="row vh-100">
             <div className="col-4 bg-blue d-flex flex-column justify-content-center text-center px-5">

@@ -61,20 +61,11 @@ def authorize():
         name = userinfo["name"]
         google_id = userinfo["id"]
 
-        print(userinfo)
-
-        # ------------ Commenting this section out until DB changes are applied ----------------
-        # # Check if the user already exists in the database
-        user = getUserByGoogleID(google_id)
-
-        if not user:
-            # If the user doesn't exist, create a new user record in the database
-            user = User(google_id=google_id, name=name, email=email)
-            addUser(user)
-            print("new user", user)
-        # --------------------------------------------------------------------------------------
+        user = User(google_id=google_id, name=name, email=email)
+        userinfo["userId"] = addUser(user)
 
         # Generate an access token and redirect to the splash page with the token in the query string
+        print(userinfo)
         access_token = create_access_token(identity=userinfo)
         # TODO: change the hardcoded url
         redirect_url = f'{os.getenv("FRONTEND_URL")}/2225-swen-356-shelf-life/?access_token={access_token}'
@@ -147,8 +138,16 @@ def create_food():
     shelfId = data.get("shelfId")
     name = data.get('name')
     expiration_date = data.get('expiration_date')
-    food = createFood( shelfId, name,expiration_date)
-    return jsonify(food.__dict__), 201
+    quantity = data.get('quantity')
+    food = newCreateFood( shelfId, name,expiration_date, quantity)
+    return jsonify(food), 201
+
+@app.route('/deletefood', methods=['POST'])
+def delete_food_new():
+    data = request.json
+    foodId = data.get("foodId")
+    food = newDeleteFood( foodId)
+    return jsonify(food), 201
 
 #used when food is being updated or used or changed
 @app.route('/food/updateQuantity/<string:id>', methods=['PUT'])
@@ -198,14 +197,15 @@ def update_food_shelf():
 
 #used to create a shelf with a given name
 @app.route('/shelf', methods=['POST'])
+@jwt_required()
 def create_shelf():
     data = request.json
-    userId = data.get('userId')
+    print("hello luke", data)
     shelfName = data.get('shelfName')
-    if(shelfName != None):
-        addShelf(userId,shelfName)
-    else:
-        addShelf(userId,1)
+
+    userId = get_jwt_identity()['userId']
+
+    addShelf(userId,shelfName)
     response = jsonify({'message': 'Successfully created a shelf'})
     return response, 201
 
@@ -220,7 +220,7 @@ def update_shelf():
     return response, 201
 
 
-@app.route('/shelf', methods=['DELETE'])
+@app.route('/deleteshelf', methods=['POST'])
 def delete_shelf():
     data = request.json
     shelfId = data.get('shelfId')
@@ -234,12 +234,16 @@ def delete_shelf():
 
 #gets a shelf by a user Id #TODO this assumes that a user only has one shelf. For the demo this will be true but if this 
 #was real application it would be more
-@app.route('/shelf/<string:userId>', methods= ['GET'])
-def get_shelf(userId):
+@app.route('/shelf', methods= ['GET'])
+@jwt_required()
+def get_shelf():
+    userId = get_jwt_identity()['userId']
+    print("GET SHELF USERID", userId)
     shelf = getShelfByUserId(userUID=userId)
-    if(shelf):
-        return jsonify(shelf.__dict__), 200
-    return jsonify({"message": "User does not have a shelf "}), 400
+
+    newShelf = [[s, getFoodByShelfId(s[0])] for s in shelf]
+
+    return jsonify(newShelf), 200
 
 
 if __name__ == '__main__':
